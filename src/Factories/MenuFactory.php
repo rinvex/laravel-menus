@@ -161,7 +161,7 @@ class MenuFactory implements Countable
     }
 
     /**
-     * Set the resolved item bindings
+     * Set the resolved item bindings.
      *
      * @param array $bindings
      *
@@ -216,7 +216,7 @@ class MenuFactory implements Countable
             return $this->resolve($property) ?: $property;
         };
 
-        $items->each(function(MenuItem $item) use($resolver) {
+        $items->each(function (MenuItem $item) use ($resolver) {
             $item->fill(array_map($resolver, $item->properties));
         });
     }

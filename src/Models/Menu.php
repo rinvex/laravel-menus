@@ -40,7 +40,7 @@ class Menu implements Countable
      * Make new menu.
      *
      * @param string   $name
-     * @param Callable $resolver
+     * @param callable $resolver
      *
      * @return \Rinvex\Menus\Factories\MenuFactory
      */
@@ -82,8 +82,8 @@ class Menu implements Countable
     /**
      * Modify a specific menu.
      *
-     * @param  string  $name
-     * @param  Closure $callback
+     * @param string  $name
+     * @param Closure $callback
      *
      * @return void
      */
