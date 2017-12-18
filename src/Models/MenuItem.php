@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Rinvex\Menus\Models;
 
 use Illuminate\Support\Facades\Route;
-use Illuminate\Support\Facades\Request;
 use Collective\Html\HtmlFacade as HTML;
+use Illuminate\Support\Facades\Request;
 
 class MenuItem
 {
@@ -232,7 +232,7 @@ class MenuItem
      */
     public function hasActiveStateFromChilds(): bool
     {
-        return $this->getChilds()->contains(function(MenuItem $child) {
+        return $this->getChilds()->contains(function (MenuItem $child) {
             if ($child->inactive()) {
                 return false;
             }
@@ -331,7 +331,7 @@ class MenuItem
      */
     public function can(string $ability, $params = null)
     {
-        $this->hideWhen = function () use($ability, $params) {
+        $this->hideWhen = function () use ($ability, $params) {
             return ! auth()->user()->can($ability, $params);
         };
 
@@ -341,7 +341,7 @@ class MenuItem
     /**
      * Check if the menu item is hidden.
      *
-     * @return boolean
+     * @return bool
      */
     public function hidden()
     {
