@@ -1,0 +1,84 @@
+{
+    "name": "rinvex/menus",
+    "description": "Rinvex Menus is a simple menu builder package for Laravel, that supports hierarchical structure, ordering, and styling with full flexibility using presenters for easy styling and custom structure of menu rendering.",
+    "keywords": [
+        "nav",
+        "menus",
+        "laravel",
+        "navigation",
+        "bootstrap",
+        "hierarchy",
+        "rinvex"
+    ],
+    "license": "MIT",
+    "homepage": "https://rinvex.com",
+    "support": {
+        "email": "help@rinvex.com",
+        "issues": "https://github.com/rinvex/menus/issues",
+        "source": "https://github.com/rinvex/menus",
+        "docs": "https://github.com/rinvex/menus/blob/master/README.md"
+    },
+    "authors": [
+        {
+            "name": "Rinvex LLC",
+            "homepage": "https://rinvex.com",
+            "email": "help@rinvex.com"
+        },
+        {
+            "name": "Abdelrahman Omran",
+            "homepage": "https://omranic.com",
+            "email": "me@omranic.com",
+            "role": "Project Lead"
+        },
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        },
+        {
+            "name": "Pingpong Labs",
+            "email": "pingpong.labs@gmail.com"
+        },
+        {
+            "name": "The Generous Laravel Community",
+            "homepage": "https://github.com/rinvex/menus/contributors"
+        }
+    ],
+    "require": {
+        "php": "^7.0.0",
+        "illuminate/view": "~5.5.0",
+        "illuminate/support": "~5.5.0",
+        "laravelcollective/html": "~5.5.0"
+    },
+    "require-dev": {
+        "mockery/mockery": "^0.9.5",
+        "phpunit/phpunit": "^6.0.0",
+        "orchestra/testbench": "^3.5.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "Rinvex\\Menus\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Rinvex\\Menus\\Tests\\": "tests"
+        }
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "optimize-autoloader": true
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Rinvex\\Menus\\Providers\\MenusServiceProvider"
+            ],
+            "aliases": {
+                "Menu": "Rinvex\\Menus\\Facades\\Menu"
+            }
+        }
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true
+}
