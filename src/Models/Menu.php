@@ -82,8 +82,8 @@ class Menu implements Countable
     /**
      * Modify a specific menu.
      *
-     * @param string  $name
-     * @param Closure $callback
+     * @param string   $name
+     * @param \Closure $callback
      *
      * @return void
      */
