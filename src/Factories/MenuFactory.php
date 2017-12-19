@@ -83,6 +83,27 @@ class MenuFactory implements Countable
     }
 
     /**
+     * Find menu item by given key and value.
+     *
+     * @param string   $title
+     * @param int      $order
+     * @param string   $icon
+     * @param array    $attributes
+     * @param callable $callback
+     *
+     * @return \Rinvex\Menus\Models\MenuItem
+     */
+    public function findByTitleOrAdd(string $title, int $order = null, string $icon = null, array $attributes = [], callable $callback = null)
+    {
+        if (! ($item = $this->findBy('title', $title, $callback))) {
+            $item = $this->add(compact('title', 'order', 'icon', 'attributes'));
+            ! is_callable($callback) || call_user_func($callback, $item);
+        }
+
+        return $item;
+    }
+
+    /**
      * Set view factory instance.
      *
      * @param \Illuminate\View\Factory $views
@@ -239,7 +260,7 @@ class MenuFactory implements Countable
     /**
      * Create new menu with dropdown.
      *
-     * @param \Closure $callback
+     * @param callable $callback
      * @param string   $title
      * @param int      $order
      * @param string   $icon
