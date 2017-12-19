@@ -322,7 +322,7 @@ class MenuItem
     }
 
     /**
-     * Set hide callback for current menu item.
+     * Set authorization callback for current menu item.
      *
      * @param string $ability
      * @param mixed  $params
@@ -333,6 +333,34 @@ class MenuItem
     {
         $this->hideWhen = function () use ($ability, $params) {
             return ! auth()->user()->can($ability, $params);
+        };
+
+        return $this;
+    }
+
+    /**
+     * Set authentication callback for current menu item.
+     *
+     * @return $this
+     */
+    public function user()
+    {
+        $this->hideWhen = function () {
+            return ! auth()->user();
+        };
+
+        return $this;
+    }
+
+    /**
+     * Set authentication callback for current menu item.
+     *
+     * @return $this
+     */
+    public function guest()
+    {
+        $this->hideWhen = function () {
+            return auth()->user();
         };
 
         return $this;

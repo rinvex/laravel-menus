@@ -21,7 +21,7 @@ This package is a rewritten fork of [nWidart/laravel-menus](https://github.com/n
 - Allow extensibility with minimum or no core changes
 - Enforce consistency and straighten API to be intuitive
 - New sidebar menu feature, to treat dropdowns differently
-- Integrate with [Laravel Authorization](https://laravel.com/docs/5.5/authorization) to streamline hiding/displaying menus according to permissions
+- Integrate with Laravel [Authentication](https://laravel.com/docs/master/authentication) and [Authorization](https://laravel.com/docs/master/authorization) features to streamline hiding/displaying menus according to permissions
 
 
 ## Table of contents
@@ -29,6 +29,7 @@ This package is a rewritten fork of [nWidart/laravel-menus](https://github.com/n
 - [Installation](#installation)
 - [Create new menu](#create-new-menu)
 - [Modify existing menu](#modify-existing-menu)
+    - [Hide menus conditionally](#hide-menus-conditionally)
 - [Search for existing menu item](#search-for-existing-menu-item)
 - [Menu presenters](#menu-presenters)
     - [Create new presenter](#create-new-presenter)
@@ -113,6 +114,33 @@ $sidebar = Menu::instance('frontend.sidebar');
 $sidebar->url('new/url', 'Menu Title #4', 40);
 $sidebar->route('some.new.route', 'Menu Title #5', 60);
 ```
+
+### Hide menus conditionally
+
+To simply hide any of your menu items, you can use any of the following methods:
+
+```php
+$sidebar->url('one/more/url', 'One more new item')->hideWhen(function () {
+    return true; // Any expression
+});
+```
+
+As you can see, the `hideWhen` method takes a closure that returns true or false. If true returned the menu item will be hidden, otherwise it will be displayed, so you can put whatever logic here to be evaluated.
+
+And as a syntactic sugar, there's few more methods that makes life easier! See:
+
+```php
+// Only display if logged in user (authenticated)
+$sidebar->url('one/more/url', 'One more new item')->user();
+
+// Only display if guest not yet authenticated
+$sidebar->url('one/more/url', 'One more new item')->guest();
+
+// Only display if logged in user has required ability (authorization)
+$sidebar->url('one/more/url', 'One more new item')->can('some-custom-ability');
+```
+
+Sure, as you expected all these methods works smoothly and fully integrated with Laravel's default [Authentication](https://laravel.com/docs/master/authentication) and [Authorization](https://laravel.com/docs/master/authorization) features.
 
 
 ## Search for existing menu item
