@@ -21,7 +21,7 @@ abstract class BasePresenter implements PresenterContract
         $results = '';
 
         foreach ($item->getChilds() as $child) {
-            if ($child->hidden()) {
+            if ($child->isHidden()) {
                 continue;
             }
 

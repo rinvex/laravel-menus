@@ -418,7 +418,7 @@ class MenuFactory implements Countable
         $menu = $presenter->getOpenTagWrapper();
 
         foreach ($this->getOrderedItems() as $item) {
-            if ($item->hidden()) {
+            if ($item->isHidden()) {
                 continue;
             }
 

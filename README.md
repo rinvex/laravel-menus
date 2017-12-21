@@ -6,7 +6,6 @@
 [![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/rinvex/menus.svg?label=Scrutinizer&style=flat-square)](https://scrutinizer-ci.com/g/rinvex/menus/)
 [![Code Climate](https://img.shields.io/codeclimate/github/rinvex/menus.svg?label=CodeClimate&style=flat-square)](https://codeclimate.com/github/rinvex/menus)
 [![Travis](https://img.shields.io/travis/rinvex/menus.svg?label=TravisCI&style=flat-square)](https://travis-ci.org/rinvex/menus)
-[![SensioLabs Insight](https://img.shields.io/sensiolabs/i/6e58b42a-0341-4a2a-9e19-4252b2f8eddf.svg?label=SensioLabs&style=flat-square)](https://insight.sensiolabs.com/projects/6e58b42a-0341-4a2a-9e19-4252b2f8eddf)
 [![StyleCI](https://styleci.io/repos/114586319/shield)](https://styleci.io/repos/114586319)
 [![License](https://img.shields.io/packagist/l/rinvex/menus.svg?label=License&style=flat-square)](https://github.com/rinvex/menus/blob/develop/LICENSE)
 
@@ -24,28 +23,6 @@ This package is a rewritten fork of [nWidart/laravel-menus](https://github.com/n
 - Integrate with Laravel [Authentication](https://laravel.com/docs/master/authentication) and [Authorization](https://laravel.com/docs/master/authorization) features to streamline hiding/displaying menus according to permissions
 
 
-## Table of contents
-
-- [Installation](#installation)
-- [Create new menu](#create-new-menu)
-- [Modify existing menu](#modify-existing-menu)
-    - [Hide menus conditionally](#hide-menus-conditionally)
-- [Search for existing menu item](#search-for-existing-menu-item)
-- [Menu presenters](#menu-presenters)
-    - [Create new presenter](#create-new-presenter)
-    - [View presenters](#view-presenters)
-- [Render existing menu](#render-existing-menu)
-    - [Data binding](#data-binding)
-    - [Change default presenter](#change-default-presenter)
-- [Changelog](#changelog)
-- [Support](#support)
-- [Contributing & Protocols](#contributing--protocols)
-- [Security Vulnerabilities](#security-vulnerabilities)
-- [About Rinvex](#about-rinvex)
-- [License](#license)
-
-
-
 ## Installation
 
 1. Install the package via composer:
@@ -61,7 +38,9 @@ This package is a rewritten fork of [nWidart/laravel-menus](https://github.com/n
 3. Done!
 
 
-## Create new menu
+## Usage
+
+### Create new menu
 
 To create new menu, simply call `Menu::make()` method. It takes two parameters, the first one is the menu title and the second one is a callback for defining menu items. See the following example:
 
@@ -70,10 +49,17 @@ use Rinvex\Menus\Models\MenuItem;
 use Rinvex\Menus\Factories\MenuFactory;
 
 Menu::make('frontend.sidebar', function(MenuFactory $menu) {
-    $menu->header('Header Title'); // Add menu header
-    $menu->url('url/path', 'Menu Title #1'); // Add url menu item
-    $menu->route(['route.name'], 'Menu Title #2'); // Add route menu item
-    $menu->divider(); // Add menu divider
+    // Add menu header
+    $menu->header('Header Title');
+
+    // Add url menu item
+    $menu->url('url/path', 'Menu Title #1');
+
+    // Add route menu item
+    $menu->route(['route.name'], 'Menu Title #2');
+
+    // Add menu divider
+    $menu->divider();
 
     // Add menu dropdown (it can have childs too)
     $menu->dropdown(function(MenuItem $dropdown) {
@@ -94,7 +80,7 @@ All the `url`, `route`, `header`, and `dropdown` methods has a standard API like
 > - You can create multiple menus with different names using the `Menu::create()` method, and call them in differnt places. Like if you want a topbar menu, and a sidebar menu ..etc
 
 
-## Modify existing menu
+### Modify existing menu
 
 To modify an existing menu item that's already been added somewhere else in the code you can use the following method:
 
@@ -115,7 +101,7 @@ $sidebar->url('new/url', 'Menu Title #4', 40);
 $sidebar->route('some.new.route', 'Menu Title #5', 60);
 ```
 
-### Hide menus conditionally
+#### Hide menus conditionally
 
 To simply hide any of your menu items, you can use any of the following methods:
 
@@ -131,19 +117,36 @@ And as a syntactic sugar, there's few more methods that makes life easier! See:
 
 ```php
 // Only display if logged in user (authenticated)
-$sidebar->url('one/more/url', 'One more new item')->user();
+$sidebar->url('one/more/url', 'One more new item')->ifUser();
 
 // Only display if guest not yet authenticated
-$sidebar->url('one/more/url', 'One more new item')->guest();
+$sidebar->url('one/more/url', 'One more new item')->ifGuest();
 
 // Only display if logged in user has required ability (authorization)
-$sidebar->url('one/more/url', 'One more new item')->can('some-custom-ability');
+$sidebar->url('one/more/url', 'One more new item')->ifCan('do-some-ability');
 ```
 
 Sure, as you expected all these methods works smoothly and fully integrated with Laravel's default [Authentication](https://laravel.com/docs/master/authentication) and [Authorization](https://laravel.com/docs/master/authorization) features.
 
+#### Activate menus conditionally
 
-## Search for existing menu item
+To activate menus conditionally based on route naming, you can set the route prefix to match against. If the current route name contains that prefix, then the menu item will be activated automatically. That way we can activate menu items by accessing child pages. Example:
+
+```php
+$menu->route(['route.name.single'], 'Menu Title #2')->activateOnRoute('route.name');
+```
+
+Now when we access any route prefixed by `route.name`, our menu with the `route.name.single` route will be activated automatically.
+
+Alternatively, you can fully control when that menu item is beeing activated by adding your own logic within callback that resolve to boolean, as follows:
+
+```php
+$menu->route(['route.name.single'], 'Menu Title #2')->activateWhen(function () {
+    return true; // Any expression
+});
+```
+
+### Search for existing menu item
 
 You can also search for a specific menu item, a dropdown for example using `findBy` and add child items to it directly. The `findBy` method can search inside your menus by any attribute and take two required parameters, the attribute name & value to search by, and optionaly you can pass a third parameter as a callback to define child items (a way to modify the dropdown in one go).
 
@@ -168,7 +171,7 @@ Menu::modify('frontend.sidebar', function(MenuFactory $menu) {
 This code search for a menu item titled 'Yet another menu item' and update only it's icon. The `fill` method accepts an array with any properties you'd like to update, and merge it with the originals, resulting an overridden menu item definition.
 
 
-## Menu presenters
+### Menu presenters
 
 Rendering menus is the easiest part, but let's discover first few interesting concepts utilized by this package, Presenters!
 
@@ -186,7 +189,7 @@ Presenters are used also to define the different layouts for your menu structure
 
 All are based on Bootstrap except for AdminLTE, but you can build your own. You always use the alias, not the full class path.
 
-### Create new presenter
+#### Create new presenter
 
 To build your own presenter you need to:
 
@@ -195,7 +198,7 @@ To build your own presenter you need to:
 
 That's it, your new presenter is ready to be used by it's name `new-presenter`. See `Rinvex\Menus\Presenters\AdminltePresenter` source code for real example.
 
-### View presenters
+#### View presenters
 
 In addition to the class-based presenters explained above, you can use view-based presenters as well. Fortunately there's also built in bootstrap views to be used and you can create your own too.
 
@@ -212,7 +215,7 @@ There's nothing complex here to be explained, just think of view presenters as n
 - `rinvex/menus::nav-pills-justified` Bootstrap Nav Pills Justified
 
 
-## Render existing menu
+### Render existing menu
 
 To render a menu you can use the `Menu::render()` method as follows:
 
@@ -222,7 +225,7 @@ Menu::render('frontend.sidebar');
 
 As you will see in the method definition, there's three more optional parameters to be explained: `public function render(string $name, string $presenter = null, array $bindings = [], bool $specialSidebar = false)`. The `presenter` parameter specify how the menu is being rendered, the `bindings` is a simple way to search and replace title placeholders (more on this below), and the `specialSidebar` is a flag to treat sidebar dropdowns differently by displaying headers above each group instead of collapsible dropdowns (beta feature).
 
-### Data binding
+#### Data binding
 
 When you define a new menu, you can put placeholders in titles, and then when rendering you can pass bindings to be replaced at runtime. Interesting, right? See the following example:
 
@@ -237,7 +240,7 @@ Menu::render('frontend.sidebar', null, ['user' => 'Omran']);
 
 As you can see we defined a new menu item with a `{user}` placeholder, and when we rendered the menu we passed the required data to be bound. It will do search/replace on runtime and so you can pass any dynamic data within menu item titles.
 
-### Change default presenter
+#### Change default presenter
 
 You can change default presenters either on menu definition or on menu rendering step, but it's always prefered to do so on runtime rendering to have a stable unchanged menu structure, while keeping layout related changes like presenters on the frontend layer.
 
