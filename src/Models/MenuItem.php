@@ -385,9 +385,9 @@ class MenuItem
     protected function hasActiveStateFromChilds(): bool
     {
         return $this->getChilds()->contains(function (MenuItem $child) {
-                return ($child->hasChilds() && $child->hasActiveStateFromChilds())
+            return ($child->hasChilds() && $child->hasActiveStateFromChilds())
                        || ($child->route && $child->hasActiveStateFromRoute())
                        || $child->isActive() || $child->hasActiveStateFromUrl();
-            }) ?? false;
+        }) ?? false;
     }
 }
