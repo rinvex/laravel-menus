@@ -52,7 +52,8 @@
     "require-dev": {
         "mockery/mockery": "^0.9.5",
         "phpunit/phpunit": "^6.0.0",
-        "orchestra/testbench": "^3.5.0"
+        "orchestra/testbench": "^3.5.0",
+        "codedungeon/phpunit-result-printer": "^0.4.0"
     },
     "autoload": {
         "psr-4": {
