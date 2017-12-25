@@ -47,7 +47,8 @@
         "php": "^7.0.0",
         "illuminate/view": "~5.5.0",
         "illuminate/support": "~5.5.0",
-        "laravelcollective/html": "~5.5.0"
+        "laravelcollective/html": "~5.5.0",
+        "roave/security-advisories": "dev-master"
     },
     "require-dev": {
         "mockery/mockery": "^0.9.5",
