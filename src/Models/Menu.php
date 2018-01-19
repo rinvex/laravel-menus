@@ -87,7 +87,7 @@ class Menu implements Countable
      *
      * @return void
      */
-    public function modify($name, Closure $callback)
+    public function modify($name, Closure $callback): void
     {
         $callback($this->instance($name));
     }

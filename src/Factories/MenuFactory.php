@@ -231,7 +231,7 @@ class MenuFactory implements Countable
      *
      * @return void
      */
-    protected function resolveItems(Collection &$items)
+    protected function resolveItems(Collection &$items): void
     {
         $resolver = function ($property) {
             return $this->resolve($property) ?: $property;
