@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rinvex\Menus\Models;
 
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
 use Collective\Html\HtmlFacade as HTML;
 use Illuminate\Support\Facades\Request;
@@ -160,7 +161,7 @@ class MenuItem
      *
      * @return \Illuminate\Support\Collection
      */
-    public function getChilds()
+    public function getChilds(): Collection
     {
         return $this->childs->sortBy('properties.order');
     }
@@ -170,7 +171,7 @@ class MenuItem
      *
      * @return string
      */
-    public function getUrl()
+    public function getUrl(): string
     {
         return $this->route ? route($this->route[0], $this->route[1] ?? []) : ($this->url ? url($this->url) : '');
     }
@@ -210,7 +211,7 @@ class MenuItem
      *
      * @return bool
      */
-    public function hasChilds()
+    public function hasChilds(): bool
     {
         return $this->childs->isNotEmpty();
     }
@@ -220,7 +221,7 @@ class MenuItem
      *
      * @return bool
      */
-    public function hasActiveOnChild()
+    public function hasActiveOnChild(): bool
     {
         return $this->hasChilds() ? $this->hasActiveStateFromChilds() : false;
     }
@@ -289,7 +290,7 @@ class MenuItem
      *
      * @return bool
      */
-    public function isHidden()
+    public function isHidden(): bool
     {
         return $this->hideWhen ? (bool) call_user_func($this->hideWhen) : false;
     }
@@ -299,7 +300,7 @@ class MenuItem
      *
      * @return bool
      */
-    public function isActive()
+    public function isActive(): bool
     {
         if (is_callable($activeWhen = $this->activeWhen)) {
             return call_user_func($activeWhen);

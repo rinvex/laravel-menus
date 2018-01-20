@@ -42,9 +42,9 @@ class Menu implements Countable
      * @param string   $name
      * @param callable $resolver
      *
-     * @return \Rinvex\Menus\Factories\MenuFactory
+     * @return void
      */
-    public function make($name, Closure $resolver)
+    public function make($name, Closure $resolver): void
     {
         $builder = new MenuFactory();
 
@@ -52,7 +52,7 @@ class Menu implements Countable
 
         $this->menus->put($name, $builder);
 
-        return $resolver($builder);
+        $resolver($builder);
     }
 
     /**
@@ -62,7 +62,7 @@ class Menu implements Countable
      *
      * @return bool
      */
-    public function has($name)
+    public function has($name): bool
     {
         return $this->menus->has($name);
     }
@@ -74,7 +74,7 @@ class Menu implements Countable
      *
      * @return \Rinvex\Menus\Factories\MenuFactory
      */
-    public function instance($name)
+    public function instance($name): MenuFactory
     {
         return $this->menus->get($name);
     }
@@ -102,7 +102,7 @@ class Menu implements Countable
      *
      * @return string
      */
-    public function render(string $name, string $presenter = null, array $bindings = [], bool $specialSidebar = false)
+    public function render(string $name, string $presenter = null, array $bindings = [], bool $specialSidebar = false): string
     {
         return $this->has($name) ? $this->instance($name)->setBindings($bindings)->render($presenter, $specialSidebar) : null;
     }
@@ -112,7 +112,7 @@ class Menu implements Countable
      *
      * @return array
      */
-    public function all()
+    public function all(): array
     {
         return $this->menus;
     }
@@ -122,7 +122,7 @@ class Menu implements Countable
      *
      * @return int
      */
-    public function count()
+    public function count(): int
     {
         return $this->menus->count();
     }
