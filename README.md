@@ -117,6 +117,9 @@ As you can see, the `hideWhen` method takes a closure that returns true or false
 And as a syntactic sugar, there's few more methods that makes life easier! See the `ifUser`, `ifGuest`, and `ifCan` methods:
 
 ```php
+// Only display if logged condition is true
+$sidebar->url('one/more/url', 'One more new item')->if(true);
+
 // Only display if logged in user (authenticated)
 $sidebar->url('one/more/url', 'One more new item')->ifUser();
 

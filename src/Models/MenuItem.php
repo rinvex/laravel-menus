@@ -260,6 +260,22 @@ class MenuItem
     }
 
     /**
+     * Set condition callback for current menu item.
+     *
+     * @param bool $condition
+     *
+     * @return $this
+     */
+    public function if(bool $condition)
+    {
+        $this->hideCallbacks->push(function () use ($condition) {
+            return ! $condition;
+        });
+
+        return $this;
+    }
+
+    /**
      * Set authentication callback for current menu item.
      *
      * @return $this
