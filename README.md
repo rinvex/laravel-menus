@@ -129,6 +129,17 @@ $sidebar->url('one/more/url', 'One more new item')->ifCan('do-some-ability');
 
 Sure, as you expected all these methods works smoothly and fully integrated with Laravel's default [Authentication](https://laravel.com/docs/master/authentication) and [Authorization](https://laravel.com/docs/master/authorization) features.
 
+To make it easy to control menu hide states, you can chain all hide methods infinitely and all hide callbacks will be stacked and executed in order. It will stop execution with the first positive condition result. Example:
+
+```php
+// Only display if logged in user has required ability (authorization)
+$sidebar->url('one/more/url', 'One more new item')->ifUser()->ifCan('do-some-ability')->hideWhen(function () {
+    return true; // Any expression
+});
+```
+
+This example means that menu will only displayed for users, who has `do-some-ability` permission, and also when the `hideWhen` callback expression returns true.
+
 #### Activate menus conditionally
 
 To activate menus conditionally based on route name, you can set the route prefix to match against. If the current route name contains that prefix, then the menu item will be activated automatically. That way we can activate parent menu items by accessing child pages. Example:

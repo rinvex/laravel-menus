@@ -26,11 +26,11 @@ class MenuItem
     protected $childs;
 
     /**
-     * The hide callback.
+     * The hide callbacks collection.
      *
-     * @var callable
+     * @var \Illuminate\Support\Collection
      */
-    protected $hideWhen;
+    protected $hideCallbacks;
 
     /**
      * The active callback.
@@ -47,6 +47,8 @@ class MenuItem
     public function __construct($properties = [])
     {
         $this->fill($properties);
+
+        $this->hideCallbacks = collect();
         $this->childs = collect();
     }
 
@@ -235,7 +237,7 @@ class MenuItem
      */
     public function hideWhen(callable $callback)
     {
-        $this->hideWhen = $callback;
+        $this->hideCallbacks->push($callback);
 
         return $this;
     }
@@ -250,9 +252,9 @@ class MenuItem
      */
     public function ifCan(string $ability, $params = null)
     {
-        $this->hideWhen = function () use ($ability, $params) {
+        $this->hideCallbacks->push(function () use ($ability, $params) {
             return ! auth()->user()->can($ability, $params);
-        };
+        });
 
         return $this;
     }
@@ -264,9 +266,9 @@ class MenuItem
      */
     public function ifUser()
     {
-        $this->hideWhen = function () {
+        $this->hideCallbacks->push(function () {
             return ! auth()->user();
-        };
+        });
 
         return $this;
     }
@@ -278,9 +280,9 @@ class MenuItem
      */
     public function ifGuest()
     {
-        $this->hideWhen = function () {
+        $this->hideCallbacks->push(function () {
             return auth()->user();
-        };
+        });
 
         return $this;
     }
@@ -292,7 +294,9 @@ class MenuItem
      */
     public function isHidden(): bool
     {
-        return $this->hideWhen ? (bool) call_user_func($this->hideWhen) : false;
+        return (bool) $this->hideCallbacks->first(function ($callback) {
+            return call_user_func($callback);
+        });
     }
 
     /**
