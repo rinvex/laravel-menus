@@ -44,7 +44,7 @@ class Menu implements Countable
      *
      * @return void
      */
-    public function make($name, Closure $resolver): void
+    public function make($name, Closure $resolver = null): void
     {
         $builder = new MenuFactory();
 
@@ -52,7 +52,7 @@ class Menu implements Countable
 
         $this->menus->put($name, $builder);
 
-        $resolver($builder);
+        ! $resolver || $resolver($builder);
     }
 
     /**
