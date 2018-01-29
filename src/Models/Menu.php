@@ -72,9 +72,9 @@ class Menu implements Countable
      *
      * @param string $name
      *
-     * @return \Rinvex\Menus\Factories\MenuFactory
+     * @return \Rinvex\Menus\Factories\MenuFactory|null
      */
-    public function instance($name): MenuFactory
+    public function instance($name): ?MenuFactory
     {
         return $this->menus->get($name);
     }
@@ -89,7 +89,8 @@ class Menu implements Countable
      */
     public function modify($name, Closure $callback): void
     {
-        $callback($this->instance($name));
+        $instance = $this->instance($name);
+        ! $instance || $callback($instance);
     }
 
     /**
