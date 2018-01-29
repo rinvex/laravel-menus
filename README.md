@@ -12,8 +12,9 @@
 
 ## Credits notice
 
-This package is a rewritten fork of [nWidart/laravel-menus](https://github.com/nWidart/laravel-menus), which itself is a fork of [pingpong-labs/menus](https://github.com/pingpong-labs/menus), original credits goes to them both. It's been widely rewritten to drop technical debt and remove legacy code, so be aware that the API is different and not compatible with the original package for good. The main differences in this fork include:
+This package is a rewritten fork of [nWidart/laravel-menus](https://github.com/nWidart/laravel-menus), which itself is a fork of [pingpong-labs/menus](https://github.com/pingpong-labs/menus), original credits goes to them both. It's been widely rewritten to drop technical debt and remove legacy code, so be aware that the API is different and not compatible with the original package(s) for good. The main goals behind this fork was to:
 
+- Simplify menu registration
 - Clean code and enhance readability
 - Enable sorting order feature by default
 - Remove legacy code, and drop technical debt
@@ -42,13 +43,13 @@ This package is a rewritten fork of [nWidart/laravel-menus](https://github.com/n
 
 ### Create new menu
 
-To create new menu, simply call `Menu::make()` method. It takes two parameters, the first one is the menu title and the second one is a callback for defining menu items. See the following example:
+To register a new menu, simply call `Menu::register()` method. It takes two parameters, the first one is the menu title and the second one is a callback for defining menu items. See the following example:
 
 ```php
 use Rinvex\Menus\Models\MenuItem;
-use Rinvex\Menus\Factories\MenuFactory;
+use Rinvex\Menus\Models\MenuGenerator;
 
-Menu::make('frontend.sidebar', function(MenuFactory $menu) {
+Menu::register('frontend.sidebar', function(MenuGenerator $menu) {
     // Add menu header
     $menu->header('Header Title');
 
@@ -67,25 +68,25 @@ Menu::make('frontend.sidebar', function(MenuFactory $menu) {
         $dropdown->url('url/path', 'Child Menu Title #1');
         $dropdown->route(['route.name'], 'Child Menu Title #2');
         $dropdown->divider();
-    }, 'Dropdown Title', 50, 'fa fa-arrows', ['data-attribute' => 'something'])
+    }, 'Dropdown Title', 50, 'fa fa-arrows', ['data-attribute' => 'something']);
 });
 ```
 
-All the `url`, `route`, `header`, and `dropdown` methods has a standard API like: `$menu->method('data', 'title', 'order', 'icon', 'attributes')` that's intutive and self explanatory. Only the first parameter is mandatory and different for each method, but the rest are all the same and optional. `header` accepts string title, `url`: string link, `route`: array with string route name and optionally route parameters, `dropdown`: callback for child items definition. Other parameters are optional as said before.
+All the `url`, `route`, `header`, and `dropdown` methods has a standard API like: `$menu->method('data', 'title', 'order', 'icon', 'attributes')` that's intutive and self explanatory. Only the first parameter is mandatory and different for each method, but the rest are all the same and optional. `header` accepts string title, `url`: string link, `route`: array with string route name and optionally route parameters, `dropdown`: callback for child items definition, other parameters are optional.
 
 > **Notes:**
 > - Menu items are ordered in ascending order by default. If you don't need sorting, just ignore the `order` parameter when defining your menus as it's optional anyway. That way menu items will be displayed in the order they've been added.
 > - The `icon` parameter takes a css class name, like `fa fa-user` for fontawesome, and the `attributes` parameter takes array of any additional HTML attributes you would like to add to your menu item.
 > - You can create a multi-level menu items by creating child dropdown menus inside parent dropdown menus, and it has no limit, so you can create the structure you need as deep as you want.
-> - You can create multiple menus with different names using the `Menu::create()` method, and call them in differnt places. Like if you want a topbar menu, and a sidebar menu ..etc
+> - You can create multiple menus with different names using the `Menu::register()` method, and call them in different places. Like if you want a topbar menu, and a sidebar menu ..etc
 
 
 ### Modify existing menu
 
-To modify an existing menu item that's already been added somewhere else in the code you can use the following method:
+To modify an existing menu item that's already been added somewhere else in the code you can use the same registration method:
 
 ```php
-Menu::modify('frontend.sidebar', function(MenuFactory $menu) {
+Menu::register('frontend.sidebar', function(MenuGenerator $menu) {
     // Add url menu item above the dropdown we created before
     $menu->url('different/path', 'Menu Title #3', 40);
 });
@@ -93,7 +94,7 @@ Menu::modify('frontend.sidebar', function(MenuFactory $menu) {
 
 As you can see, we just modified the `frontend.sidebar` menu, and added a new url menu item under the divider, above the dropdown. See, it's that simple!
 
-Alternatively you can get a handle of the menu you need to modify, and then use it as you prefer:
+Alternatively you can get a handle of the menu you need to modify, and then use it as you prefer, like so:
 
 ```php
 $sidebar = Menu::instance('frontend.sidebar');
@@ -113,7 +114,7 @@ $sidebar->url('one/more/url', 'One more new item')->hideWhen(function () {
 
 As you can see, the `hideWhen` method takes a closure that returns true or false. If true returned the menu item will be hidden, otherwise it will be displayed, so you can put whatever logic here to be evaluated.
 
-And as a syntactic sugar, there's few more methods that makes life easier! See:
+And as a syntactic sugar, there's few more methods that makes life easier! See the `ifUser`, `ifGuest`, and `ifCan` methods:
 
 ```php
 // Only display if logged in user (authenticated)
@@ -130,18 +131,18 @@ Sure, as you expected all these methods works smoothly and fully integrated with
 
 #### Activate menus conditionally
 
-To activate menus conditionally based on route naming, you can set the route prefix to match against. If the current route name contains that prefix, then the menu item will be activated automatically. That way we can activate menu items by accessing child pages. Example:
+To activate menus conditionally based on route name, you can set the route prefix to match against. If the current route name contains that prefix, then the menu item will be activated automatically. That way we can activate parent menu items by accessing child pages. Example:
 
 ```php
-$menu->route(['route.name.single'], 'Menu Title #2')->activateOnRoute('route.name');
+$menu->route(['route.name.example'], 'Menu Title #2')->activateOnRoute('route.name');
 ```
 
-Now when we access any route prefixed by `route.name`, our menu with the `route.name.single` route will be activated automatically.
+Now when we access any route prefixed by `route.name`, our menu with the `route.name.example` route will be activated automatically.
 
 Alternatively, you can fully control when that menu item is beeing activated by adding your own logic within callback that resolve to boolean, as follows:
 
 ```php
-$menu->route(['route.name.single'], 'Menu Title #2')->activateWhen(function () {
+$menu->route(['route.name.example'], 'Menu Title #2')->activateWhen(function () {
     return true; // Any expression
 });
 ```
@@ -151,7 +152,7 @@ $menu->route(['route.name.single'], 'Menu Title #2')->activateWhen(function () {
 You can also search for a specific menu item, a dropdown for example using `findBy` and add child items to it directly. The `findBy` method can search inside your menus by any attribute and take two required parameters, the attribute name & value to search by, and optionaly you can pass a third parameter as a callback to define child items (a way to modify the dropdown in one go).
 
 ```php
-Menu::modify('frontend.sidebar', function(MenuFactory $menu) {
+Menu::register('frontend.sidebar', function(MenuGenerator $menu) {
     $menu->findBy('title', 'Dropdown Title', function (MenuItem $dropdown) { // Seach items by title
         $dropdown->route(['the.newest.route'], 'Yet another menu item', 15, 'fa fa-building-o');
     });
@@ -161,7 +162,7 @@ Menu::modify('frontend.sidebar', function(MenuFactory $menu) {
 If you need to update a specific menu item, or for example you need to change the url or rename the title, that's totally achievable too using the same method above with one simple tweak:
 
 ```php
-Menu::modify('frontend.sidebar', function(MenuFactory $menu) {
+Menu::register('frontend.sidebar', function(MenuGenerator $menu) {
     $menu->findBy('title', 'Yet another menu item', function (MenuItem $item) {
         $item->fill(['icon' => 'fa fa-business]);
     });

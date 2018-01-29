@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rinvex\Menus\Factories;
+namespace Rinvex\Menus\Models;
 
 use Countable;
 use Rinvex\Menus\Models\MenuItem;
@@ -12,7 +12,7 @@ use Rinvex\Menus\Presenters\NavbarPresenter;
 use Rinvex\Menus\Contracts\PresenterContract;
 use Illuminate\Contracts\View\View as ViewContract;
 
-class MenuFactory implements Countable
+class MenuGenerator implements Countable
 {
     /**
      * The items collection.
@@ -57,7 +57,7 @@ class MenuFactory implements Countable
     protected $bindings = [];
 
     /**
-     * Create a new MenuFactory instance.
+     * Create a new MenuGenerator instance.
      */
     public function __construct()
     {

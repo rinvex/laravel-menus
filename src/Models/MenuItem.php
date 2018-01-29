@@ -365,7 +365,7 @@ class MenuItem
      */
     protected function hasActiveStateFromRoute(): bool
     {
-        return Route::is($this->route);
+        return Route::is($this->route[0]);
     }
 
     /**

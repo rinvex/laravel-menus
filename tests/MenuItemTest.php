@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace Rinvex\Menus\Tests;
 
-use Rinvex\Menus\Models\Menu;
 use Rinvex\Menus\Models\MenuItem;
+use Rinvex\Menus\Models\MenuManager;
 
 class MenuItemTest extends BaseTestCase
 {
     /**
-     * @var Menu
+     * @var \Rinvex\Menus\Models\MenuManager
      */
-    private $menu;
+    protected $menuManager;
 
     public function setUp()
     {
         parent::setUp();
-        $this->menu = app(Menu::class);
+        $this->menuManager = app(MenuManager::class);
     }
 
     /** @test */
