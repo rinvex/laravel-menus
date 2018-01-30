@@ -6,6 +6,7 @@ namespace Rinvex\Menus\Models;
 
 use Closure;
 use Countable;
+use ReflectionFunction;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
 use Rinvex\Menus\Models\MenuGenerator;
@@ -123,10 +124,17 @@ class MenuManager implements Countable
     {
         if ($this->has($name)) {
             $instance = $this->instance($name);
-            $params = array_values(Route::current()->parameters());
 
-            $this->callbacks->get($name)->each(function ($callback) use ($instance, $params) {
-                $callback($instance, ...$params);
+            $this->callbacks->get($name)->each(function ($callback) use ($instance) {
+                $reflectionParams = collect((new ReflectionFunction($callback))->getParameters());
+                $reflectionParams->shift();
+
+                collect($reflectionParams)->each(function ($param) use (&$params) {
+                    $params[] = Route::current()->hasParameter($param->getName()) ? Route::current()->parameter($param->getName())
+                        : (class_exists($param->getClass()->getName()) ? app($param->getClass()->getName()) : null);
+                });
+
+                $params ? $callback($instance, ...$params) : $callback($instance);
             });
 
             return $instance->setBindings($bindings)->render($presenter, $specialSidebar);
