@@ -262,11 +262,11 @@ class MenuItem
     /**
      * Set condition callback for current menu item.
      *
-     * @param bool $condition
+     * @param mixed $condition
      *
      * @return $this
      */
-    public function if(bool $condition)
+    public function if($condition)
     {
         $this->hideCallbacks->push(function () use ($condition) {
             return ! $condition;
