@@ -9,7 +9,6 @@ use Countable;
 use ReflectionFunction;
 use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Route;
-use Rinvex\Menus\Models\MenuGenerator;
 use Illuminate\Contracts\View\Factory as ViewFactory;
 
 class MenuManager implements Countable
