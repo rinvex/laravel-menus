@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Rinvex\Menus\Models;
 
 use Countable;
-use Rinvex\Menus\Models\MenuItem;
 use Illuminate\Support\Collection;
 use Illuminate\View\Factory as ViewFactory;
 use Rinvex\Menus\Presenters\NavbarPresenter;
