@@ -247,13 +247,14 @@ class MenuItem
      *
      * @param string $ability
      * @param mixed  $params
+     * @param string $guard
      *
      * @return $this
      */
-    public function ifCan(string $ability, $params = null)
+    public function ifCan(string $ability, $params = null, $guard = null)
     {
-        $this->hideCallbacks->push(function () use ($ability, $params) {
-            return ! auth()->user()->can($ability, $params);
+        $this->hideCallbacks->push(function () use ($ability, $params, $guard) {
+            return ! optional(auth()->guard($guard)->user())->can($ability, $params);
         });
 
         return $this;
@@ -278,12 +279,14 @@ class MenuItem
     /**
      * Set authentication callback for current menu item.
      *
+     * @param string $guard
+     *
      * @return $this
      */
-    public function ifUser()
+    public function ifUser($guard = null)
     {
-        $this->hideCallbacks->push(function () {
-            return ! auth()->user();
+        $this->hideCallbacks->push(function () use ($guard) {
+            return ! auth()->guard($guard)->user();
         });
 
         return $this;
@@ -292,12 +295,14 @@ class MenuItem
     /**
      * Set authentication callback for current menu item.
      *
+     * @param string $guard
+     *
      * @return $this
      */
-    public function ifGuest()
+    public function ifGuest($guard = null)
     {
-        $this->hideCallbacks->push(function () {
-            return auth()->user();
+        $this->hideCallbacks->push(function () use ($guard) {
+            return auth()->guard($guard)->user();
         });
 
         return $this;
