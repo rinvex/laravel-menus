@@ -2,15 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Rinvex\Menus\Factories;
+namespace Rinvex\Menus\Models;
 
 use Countable;
-use Rinvex\Menus\Models\MenuItem;
 use Illuminate\Support\Collection;
 use Illuminate\View\Factory as ViewFactory;
 use Rinvex\Menus\Presenters\NavbarPresenter;
+use Rinvex\Menus\Contracts\PresenterContract;
+use Illuminate\Contracts\View\View as ViewContract;
 
-class MenuFactory implements Countable
+class MenuGenerator implements Countable
 {
     /**
      * The items collection.
@@ -55,7 +56,7 @@ class MenuFactory implements Countable
     protected $bindings = [];
 
     /**
-     * Create a new MenuFactory instance.
+     * Create a new MenuGenerator instance.
      */
     public function __construct()
     {
@@ -69,15 +70,36 @@ class MenuFactory implements Countable
      * @param string   $value
      * @param callable $callback
      *
-     * @return \Rinvex\Menus\Models\MenuItem
+     * @return \Rinvex\Menus\Models\MenuItem|null
      */
-    public function findBy(string $key, string $value, callable $callback = null)
+    public function findBy(string $key, string $value, callable $callback = null): ?MenuItem
     {
         $item = $this->items->filter(function ($item) use ($key, $value) {
             return $item->{$key} === $value;
         })->first();
 
         (! is_callable($callback) || ! $item) || call_user_func($callback, $item);
+
+        return $item;
+    }
+
+    /**
+     * Find menu item by given key and value.
+     *
+     * @param string   $title
+     * @param int      $order
+     * @param string   $icon
+     * @param array    $attributes
+     * @param callable $callback
+     *
+     * @return \Rinvex\Menus\Models\MenuItem|null
+     */
+    public function findByTitleOrAdd(string $title, int $order = null, string $icon = null, array $attributes = [], callable $callback = null): ?MenuItem
+    {
+        if (! ($item = $this->findBy('title', $title, $callback))) {
+            $item = $this->add(compact('title', 'order', 'icon', 'attributes'));
+            ! is_callable($callback) || call_user_func($callback, $item);
+        }
 
         return $item;
     }
@@ -143,7 +165,7 @@ class MenuFactory implements Countable
      *
      * @return \Rinvex\Menus\Contracts\PresenterContract
      */
-    public function getPresenter()
+    public function getPresenter(): PresenterContract
     {
         return new $this->presenter();
     }
@@ -155,7 +177,7 @@ class MenuFactory implements Countable
      *
      * @return bool
      */
-    public function presenterExists(string $presenter)
+    public function presenterExists(string $presenter): bool
     {
         return app('rinvex.menus.presenters')->has($presenter);
     }
@@ -210,7 +232,7 @@ class MenuFactory implements Countable
      *
      * @return void
      */
-    protected function resolveItems(Collection &$items)
+    protected function resolveItems(Collection &$items): void
     {
         $resolver = function ($property) {
             return $this->resolve($property) ?: $property;
@@ -228,7 +250,7 @@ class MenuFactory implements Countable
      *
      * @return \Rinvex\Menus\Models\MenuItem
      */
-    protected function add(array $properties = [])
+    protected function add(array $properties = []): MenuItem
     {
         $properties['attributes']['id'] = $properties['attributes']['id'] ?? md5(json_encode($properties));
         $this->items->push($item = new MenuItem($properties));
@@ -239,7 +261,7 @@ class MenuFactory implements Countable
     /**
      * Create new menu with dropdown.
      *
-     * @param \Closure $callback
+     * @param callable $callback
      * @param string   $title
      * @param int      $order
      * @param string   $icon
@@ -247,7 +269,7 @@ class MenuFactory implements Countable
      *
      * @return \Rinvex\Menus\Models\MenuItem
      */
-    public function dropdown(callable $callback, string $title, int $order = null, string $icon = null, array $attributes = [])
+    public function dropdown(callable $callback, string $title, int $order = null, string $icon = null, array $attributes = []): MenuItem
     {
         call_user_func($callback, $item = $this->add(compact('title', 'order', 'icon', 'attributes')));
 
@@ -265,7 +287,7 @@ class MenuFactory implements Countable
      *
      * @return \Rinvex\Menus\Models\MenuItem
      */
-    public function route(array $route, string $title, int $order = null, string $icon = null, array $attributes = [])
+    public function route(array $route, string $title, int $order = null, string $icon = null, array $attributes = []): MenuItem
     {
         return $this->add(compact('route', 'title', 'order', 'icon', 'attributes'));
     }
@@ -281,7 +303,7 @@ class MenuFactory implements Countable
      *
      * @return \Rinvex\Menus\Models\MenuItem
      */
-    public function url(string $url, string $title, int $order = null, string $icon = null, array $attributes = [])
+    public function url(string $url, string $title, int $order = null, string $icon = null, array $attributes = []): MenuItem
     {
         ! $this->urlPrefix || $url = $this->formatUrl($url);
 
@@ -298,7 +320,7 @@ class MenuFactory implements Countable
      *
      * @return \Rinvex\Menus\Models\MenuItem
      */
-    public function header(string $title, int $order = null, string $icon = null, array $attributes = [])
+    public function header(string $title, int $order = null, string $icon = null, array $attributes = []): MenuItem
     {
         $type = 'header';
 
@@ -313,7 +335,7 @@ class MenuFactory implements Countable
      *
      * @return \Rinvex\Menus\Models\MenuItem
      */
-    public function divider(int $order = null, array $attributes = [])
+    public function divider(int $order = null, array $attributes = []): MenuItem
     {
         return $this->add(['type' => 'divider', 'order' => $order, 'attributes' => $attributes]);
     }
@@ -323,7 +345,7 @@ class MenuFactory implements Countable
      *
      * @return int
      */
-    public function count()
+    public function count(): int
     {
         return $this->items->count();
     }
@@ -345,7 +367,7 @@ class MenuFactory implements Countable
      *
      * @return \Illuminate\Support\Collection
      */
-    protected function getOrderedItems()
+    protected function getOrderedItems(): Collection
     {
         return $this->items->sortBy('properties.order');
     }
@@ -358,7 +380,7 @@ class MenuFactory implements Countable
      *
      * @return string
      */
-    public function render(string $presenter = null, bool $specialSidebar = false)
+    public function render(string $presenter = null, bool $specialSidebar = false): string
     {
         $this->resolveItems($this->items);
 
@@ -379,7 +401,7 @@ class MenuFactory implements Countable
      *
      * @return \Illuminate\Contracts\View\View
      */
-    protected function renderView(string $view, bool $specialSidebar = false)
+    protected function renderView(string $view, bool $specialSidebar = false): ViewContract
     {
         return $this->views->make($view, ['items' => $this->getOrderedItems(), 'specialSidebar' => $specialSidebar]);
     }
@@ -391,13 +413,13 @@ class MenuFactory implements Countable
      *
      * @return string
      */
-    protected function renderMenu(bool $specialSidebar = false)
+    protected function renderMenu(bool $specialSidebar = false): string
     {
         $presenter = $this->getPresenter();
         $menu = $presenter->getOpenTagWrapper();
 
         foreach ($this->getOrderedItems() as $item) {
-            if ($item->hidden()) {
+            if ($item->isHidden()) {
                 continue;
             }
 
@@ -424,7 +446,7 @@ class MenuFactory implements Countable
      *
      * @return string
      */
-    protected function formatUrl(string $url)
+    protected function formatUrl(string $url): string
     {
         $uri = $this->urlPrefix.$url;
 

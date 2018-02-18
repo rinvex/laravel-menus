@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Rinvex\Menus\Providers;
 
-use Rinvex\Menus\Models\Menu;
+use Rinvex\Menus\Models\MenuManager;
 use Illuminate\Support\ServiceProvider;
 
 class MenusServiceProvider extends ServiceProvider
@@ -36,9 +36,7 @@ class MenusServiceProvider extends ServiceProvider
     public function register()
     {
         // Register menus service
-        $this->app->singleton('rinvex.menus', function ($app) {
-            return new Menu($app['view']);
-        });
+        $this->app->singleton('rinvex.menus', MenuManager::class);
 
         // Register menu presenters service
         $this->app->singleton('rinvex.menus.presenters', function ($app) {
@@ -51,7 +49,7 @@ class MenusServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    protected function publishResources()
+    protected function publishResources(): void
     {
         $this->publishes([realpath(__DIR__.'/../../resources/views') => resource_path('views/vendor/rinvex/menus')], 'rinvex-menus-views');
     }

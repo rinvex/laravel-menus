@@ -4,20 +4,20 @@ declare(strict_types=1);
 
 namespace Rinvex\Menus\Tests;
 
-use Rinvex\Menus\Models\Menu;
 use Rinvex\Menus\Models\MenuItem;
+use Rinvex\Menus\Models\MenuManager;
 
 class MenuItemTest extends BaseTestCase
 {
     /**
-     * @var Menu
+     * @var \Rinvex\Menus\Models\MenuManager
      */
-    private $menu;
+    protected $menuManager;
 
     public function setUp()
     {
         parent::setUp();
-        $this->menu = app(Menu::class);
+        $this->menuManager = app(MenuManager::class);
     }
 
     /** @test */
@@ -38,7 +38,6 @@ class MenuItemTest extends BaseTestCase
             'type' => 'my-menu-item',
             'icon' => 'fa fa-user',
             'attributes' => [],
-            'active' => false,
             'order' => 1,
         ];
         $menuItem = new MenuItem($properties);
@@ -67,7 +66,6 @@ class MenuItemTest extends BaseTestCase
         $this->assertEquals('my-menu-item', $menuItem->type);
         $this->assertEquals('fa fa-user', $menuItem->icon);
         $this->assertSame([], $menuItem->attributes);
-        $this->assertFalse($menuItem->active);
         $this->assertSame(1, $menuItem->order);
     }
 
@@ -281,9 +279,5 @@ class MenuItemTest extends BaseTestCase
         }, 'Dropdown item');
 
         $this->assertTrue($menuItem->hasChilds());
-    }
-
-    public function it_can_check_active_state_on_item()
-    {
     }
 }

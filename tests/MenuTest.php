@@ -4,88 +4,64 @@ declare(strict_types=1);
 
 namespace Rinvex\Menus\Tests;
 
-use Rinvex\Menus\Models\Menu;
-use Rinvex\Menus\Factories\MenuFactory;
+use Rinvex\Menus\Models\MenuManager;
+use Rinvex\Menus\Models\MenuGenerator;
 
 class MenuTest extends BaseTestCase
 {
     /**
-     * @var Menu
+     * @var \Rinvex\Menus\Models\MenuManager
      */
-    private $menu;
+    protected $menuManager;
 
     public function setUp()
     {
         parent::setUp();
 
-        $this->menu = app(Menu::class);
-    }
-
-    /** @test */
-    public function it_generates_an_empty_menu()
-    {
-        $this->menu->make('test', function (MenuFactory $menu) {
-        });
-
-        $expected = '<ul class="nav navbar-nav"></ul>';
-
-        self::assertEquals($expected, $this->menu->render('test'));
+        $this->menuManager = app(MenuManager::class);
     }
 
     /** @test */
     public function it_can_get_the_instance_of_a_menu()
     {
-        $this->menu->make('test', function (MenuFactory $menu) {
+        $this->menuManager->register('test', function (MenuGenerator $menu) {
         });
 
-        $this->assertInstanceOf(MenuFactory::class, $this->menu->instance('test'));
-    }
-
-    /** @test */
-    public function it_can_modify_a_menu_instance()
-    {
-        $this->menu->make('test', function (MenuFactory $menu) {
-        });
-
-        $this->menu->modify('test', function (MenuFactory $builder) {
-            $builder->url('hello', 'world');
-        });
-
-        $this->assertCount(1, $this->menu->instance('test'));
+        $this->assertInstanceOf(MenuGenerator::class, $this->menuManager->instance('test'));
     }
 
     /** @test */
     public function it_can_get_all_menus()
     {
-        $this->menu->make('main', function (MenuFactory $menu) {
+        $this->menuManager->register('main', function (MenuGenerator $menu) {
         });
-        $this->menu->make('footer', function (MenuFactory $menu) {
+        $this->menuManager->register('footer', function (MenuGenerator $menu) {
         });
 
-        $this->assertCount(2, $this->menu->all());
+        $this->assertCount(2, $this->menuManager->all());
     }
 
     /** @test */
     public function it_can_count_menus()
     {
-        $this->menu->make('main', function (MenuFactory $menu) {
+        $this->menuManager->register('main', function (MenuGenerator $menu) {
         });
-        $this->menu->make('footer', function (MenuFactory $menu) {
+        $this->menuManager->register('footer', function (MenuGenerator $menu) {
         });
 
-        $this->assertEquals(2, $this->menu->count());
+        $this->assertEquals(2, $this->menuManager->count());
     }
 
     /** @test */
     public function it_can_destroy_all_menus()
     {
-        $this->menu->make('main', function (MenuFactory $menu) {
+        $this->menuManager->register('main', function (MenuGenerator $menu) {
         });
-        $this->menu->make('footer', function (MenuFactory $menu) {
+        $this->menuManager->register('footer', function (MenuGenerator $menu) {
         });
 
-        $this->assertCount(2, $this->menu->all());
-        $this->menu->destroy();
-        $this->assertCount(0, $this->menu->all());
+        $this->assertCount(2, $this->menuManager->all());
+        $this->menuManager->destroy();
+        $this->assertCount(0, $this->menuManager->all());
     }
 }

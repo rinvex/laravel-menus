@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rinvex\Menus\Models;
 
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
 use Collective\Html\HtmlFacade as HTML;
 use Illuminate\Support\Facades\Request;
@@ -25,11 +26,18 @@ class MenuItem
     protected $childs;
 
     /**
-     * The hide callback.
+     * The hide callbacks collection.
+     *
+     * @var \Illuminate\Support\Collection
+     */
+    protected $hideCallbacks;
+
+    /**
+     * The active callback.
      *
      * @var callable
      */
-    protected $hideWhen;
+    protected $activeWhen;
 
     /**
      * Constructor.
@@ -39,7 +47,21 @@ class MenuItem
     public function __construct($properties = [])
     {
         $this->fill($properties);
+
+        $this->hideCallbacks = collect();
         $this->childs = collect();
+    }
+
+    /**
+     * Get property.
+     *
+     * @param string $key
+     *
+     * @return mixed
+     */
+    public function __get($key)
+    {
+        return data_get($this->properties, $key);
     }
 
     /**
@@ -54,21 +76,6 @@ class MenuItem
         $this->properties = array_merge($this->properties, $properties);
 
         return $this;
-    }
-
-    /**
-     * Add new child item.
-     *
-     * @param array $properties
-     *
-     * @return static
-     */
-    protected function add(array $properties = [])
-    {
-        $properties['attributes']['id'] = $properties['attributes']['id'] ?? md5(json_encode($properties));
-        $this->childs->push($item = new static($properties));
-
-        return $item;
     }
 
     /**
@@ -156,7 +163,7 @@ class MenuItem
      *
      * @return \Illuminate\Support\Collection
      */
-    public function getChilds()
+    public function getChilds(): Collection
     {
         return $this->childs->sortBy('properties.order');
     }
@@ -166,7 +173,7 @@ class MenuItem
      *
      * @return string
      */
-    public function getUrl()
+    public function getUrl(): string
     {
         return $this->route ? route($this->route[0], $this->route[1] ?? []) : ($this->url ? url($this->url) : '');
     }
@@ -178,7 +185,7 @@ class MenuItem
      */
     public function getAttributes()
     {
-        return HTML::attributes(array_except($this->attributes ?? [], ['active']));
+        return HTML::attributes($this->attributes);
     }
 
     /**
@@ -206,7 +213,7 @@ class MenuItem
      *
      * @return bool
      */
-    public function hasChilds()
+    public function hasChilds(): bool
     {
         return $this->childs->isNotEmpty();
     }
@@ -216,68 +223,112 @@ class MenuItem
      *
      * @return bool
      */
-    public function hasActiveOnChild()
+    public function hasActiveOnChild(): bool
     {
-        if ($this->inactive()) {
-            return false;
-        }
-
         return $this->hasChilds() ? $this->hasActiveStateFromChilds() : false;
     }
 
     /**
-     * Check if the item has active state from childs.
+     * Set hide callback for current menu item.
      *
-     * @return bool
+     * @param callable $callback
+     *
+     * @return $this
      */
-    public function hasActiveStateFromChilds(): bool
+    public function hideWhen(callable $callback)
     {
-        return $this->getChilds()->contains(function (MenuItem $child) {
-            if ($child->inactive()) {
-                return false;
-            }
+        $this->hideCallbacks->push($callback);
 
-            return ($child->hasChilds() && $child->hasActiveStateFromChilds())
-                   || ($child->route && $child->hasActiveStateFromRoute())
-                   || $child->isActive() || $child->hasActiveStateFromUrl();
-        }) ?? false;
+        return $this;
     }
 
     /**
-     * Get inactive state.
+     * Set authorization callback for current menu item.
+     *
+     * @param string $ability
+     * @param mixed  $params
+     * @param string $guard
+     *
+     * @return $this
+     */
+    public function ifCan(string $ability, $params = null, $guard = null)
+    {
+        $this->hideCallbacks->push(function () use ($ability, $params, $guard) {
+            return ! optional(auth()->guard($guard)->user())->can($ability, $params);
+        });
+
+        return $this;
+    }
+
+    /**
+     * Set condition callback for current menu item.
+     *
+     * @param mixed $condition
+     *
+     * @return $this
+     */
+    public function if($condition)
+    {
+        $this->hideCallbacks->push(function () use ($condition) {
+            return ! $condition;
+        });
+
+        return $this;
+    }
+
+    /**
+     * Set authentication callback for current menu item.
+     *
+     * @param string $guard
+     *
+     * @return $this
+     */
+    public function ifUser($guard = null)
+    {
+        $this->hideCallbacks->push(function () use ($guard) {
+            return ! auth()->guard($guard)->user();
+        });
+
+        return $this;
+    }
+
+    /**
+     * Set authentication callback for current menu item.
+     *
+     * @param string $guard
+     *
+     * @return $this
+     */
+    public function ifGuest($guard = null)
+    {
+        $this->hideCallbacks->push(function () use ($guard) {
+            return auth()->guard($guard)->user();
+        });
+
+        return $this;
+    }
+
+    /**
+     * Check if the menu item is hidden.
      *
      * @return bool
      */
-    public function inactive(): bool
+    public function isHidden(): bool
     {
-        if (is_bool($inactive = $this->inactive)) {
-            return $inactive;
-        }
-
-        if (is_callable($inactive)) {
-            return (bool) call_user_func($inactive);
-        }
-
-        return false;
+        return (bool) $this->hideCallbacks->first(function ($callback) {
+            return call_user_func($callback);
+        });
     }
 
     /**
      * Get active state for current item.
      *
-     * @return mixed
+     * @return bool
      */
-    public function isActive()
+    public function isActive(): bool
     {
-        if ($this->inactive()) {
-            return false;
-        }
-
-        if (is_bool($active = $this->active)) {
-            return $active;
-        }
-
-        if (is_callable($active)) {
-            return call_user_func($active);
+        if (is_callable($activeWhen = $this->activeWhen)) {
+            return call_user_func($activeWhen);
         }
 
         if ($this->route) {
@@ -288,13 +339,58 @@ class MenuItem
     }
 
     /**
+     * Set active callback.
+     *
+     * @param callable $route
+     *
+     * @return $this
+     */
+    public function activateWhen(callable $callback)
+    {
+        $this->activeWhen = $callback;
+
+        return $this;
+    }
+
+    /**
+     * Set active callback on the given route.
+     *
+     * @param string $route
+     *
+     * @return $this
+     */
+    public function activateOnRoute(string $route)
+    {
+        $this->activeWhen = function () use ($route) {
+            return str_contains(Route::currentRouteName(), $route);
+        };
+
+        return $this;
+    }
+
+    /**
+     * Add new child item.
+     *
+     * @param array $properties
+     *
+     * @return static
+     */
+    protected function add(array $properties = [])
+    {
+        $properties['attributes']['id'] = $properties['attributes']['id'] ?? md5(json_encode($properties));
+        $this->childs->push($item = new static($properties));
+
+        return $item;
+    }
+
+    /**
      * Get active status using route.
      *
      * @return bool
      */
     protected function hasActiveStateFromRoute(): bool
     {
-        return Route::is($this->route);
+        return Route::is($this->route[0]);
     }
 
     /**
@@ -308,55 +404,16 @@ class MenuItem
     }
 
     /**
-     * Set hide callback for current menu item.
-     *
-     * @param callable $callback
-     *
-     * @return $this
-     */
-    public function hideWhen(callable $callback)
-    {
-        $this->hideWhen = $callback;
-
-        return $this;
-    }
-
-    /**
-     * Set hide callback for current menu item.
-     *
-     * @param string $ability
-     * @param mixed  $params
-     *
-     * @return $this
-     */
-    public function can(string $ability, $params = null)
-    {
-        $this->hideWhen = function () use ($ability, $params) {
-            return ! auth()->user()->can($ability, $params);
-        };
-
-        return $this;
-    }
-
-    /**
-     * Check if the menu item is hidden.
+     * Check if the item has active state from childs.
      *
      * @return bool
      */
-    public function hidden()
+    protected function hasActiveStateFromChilds(): bool
     {
-        return $this->hideWhen ? (bool) call_user_func($this->hideWhen) : false;
-    }
-
-    /**
-     * Get property.
-     *
-     * @param string $key
-     *
-     * @return mixed
-     */
-    public function __get($key)
-    {
-        return data_get($this->properties, $key);
+        return $this->getChilds()->contains(function (MenuItem $child) {
+            return ($child->hasChilds() && $child->hasActiveStateFromChilds())
+                       || ($child->route && $child->hasActiveStateFromRoute())
+                       || $child->isActive() || $child->hasActiveStateFromUrl();
+        }) ?? false;
     }
 }
