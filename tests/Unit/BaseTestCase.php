@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rinvex\Menus\Tests;
+namespace Rinvex\Menus\Tests\Unit;
 
 use Collective\Html\HtmlServiceProvider;
 use Rinvex\Menus\Providers\MenusServiceProvider;

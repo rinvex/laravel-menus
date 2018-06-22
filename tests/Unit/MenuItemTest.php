@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rinvex\Menus\Tests;
+namespace Rinvex\Menus\Tests\Unit;
 
 use Rinvex\Menus\Models\MenuItem;
 use Rinvex\Menus\Models\MenuManager;
