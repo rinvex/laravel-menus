@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rinvex\Menus\Tests;
+namespace Rinvex\Menus\Tests\Unit;
 
 use Rinvex\Menus\Models\MenuItem;
 use Rinvex\Menus\Models\MenuManager;
@@ -14,7 +14,7 @@ class MenuItemTest extends BaseTestCase
      */
     protected $menuManager;
 
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
         $this->menuManager = app(MenuManager::class);

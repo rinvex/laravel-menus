@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Rinvex\Menus\Tests;
+namespace Rinvex\Menus\Tests\Unit;
 
 use Collective\Html\HtmlServiceProvider;
 use Rinvex\Menus\Providers\MenusServiceProvider;
@@ -10,7 +10,7 @@ use Orchestra\Testbench\TestCase as OrchestraTestCase;
 
 abstract class BaseTestCase extends OrchestraTestCase
 {
-    public function setUp()
+    protected function setUp()
     {
         parent::setUp();
     }
