@@ -2,12 +2,12 @@
 
 **Rinvex Menus** is a simple menu builder package for Laravel, that supports hierarchical structure, ordering, and styling with full flexibility using presenters for easy styling and custom structure of menu rendering.
 
-[![Packagist](https://img.shields.io/packagist/v/rinvex/menus.svg?label=Packagist&style=flat-square)](https://packagist.org/packages/rinvex/menus)
-[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/rinvex/menus.svg?label=Scrutinizer&style=flat-square)](https://scrutinizer-ci.com/g/rinvex/menus/)
-[![Code Climate](https://img.shields.io/codeclimate/github/rinvex/menus.svg?label=CodeClimate&style=flat-square)](https://codeclimate.com/github/rinvex/menus)
-[![Travis](https://img.shields.io/travis/rinvex/menus.svg?label=TravisCI&style=flat-square)](https://travis-ci.org/rinvex/menus)
+[![Packagist](https://img.shields.io/packagist/v/rinvex/laravel-menus.svg?label=Packagist&style=flat-square)](https://packagist.org/packages/rinvex/laravel-menus)
+[![Scrutinizer Code Quality](https://img.shields.io/scrutinizer/g/rinvex/laravel-menus.svg?label=Scrutinizer&style=flat-square)](https://scrutinizer-ci.com/g/rinvex/laravel-menus/)
+[![Code Climate](https://img.shields.io/codeclimate/github/rinvex/laravel-menus.svg?label=CodeClimate&style=flat-square)](https://codeclimate.com/github/rinvex/laravel-menus)
+[![Travis](https://img.shields.io/travis/rinvex/laravel-menus.svg?label=TravisCI&style=flat-square)](https://travis-ci.org/rinvex/laravel-menus)
 [![StyleCI](https://styleci.io/repos/114586319/shield)](https://styleci.io/repos/114586319)
-[![License](https://img.shields.io/packagist/l/rinvex/menus.svg?label=License&style=flat-square)](https://github.com/rinvex/menus/blob/develop/LICENSE)
+[![License](https://img.shields.io/packagist/l/rinvex/laravel-menus.svg?label=License&style=flat-square)](https://github.com/rinvex/laravel-menus/blob/develop/LICENSE)
 
 
 ## Credits notice
@@ -28,7 +28,7 @@ This package is a rewritten fork of [nWidart/laravel-menus](https://github.com/n
 
 1. Install the package via composer:
     ```shell
-    composer require rinvex/menus
+    composer require rinvex/laravel-menus
     ```
 
 2. **Optionally** you can publish view files by running the following commands:
