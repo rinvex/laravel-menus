@@ -51,6 +51,6 @@ class MenusServiceProvider extends ServiceProvider
      */
     protected function publishResources(): void
     {
-        $this->publishes([realpath(__DIR__.'/../../resources/views') => resource_path('views/vendor/rinvex/menus')], 'rinvex-menus-views');
+        $this->publishes([realpath(__DIR__.'/../../resources/views') => resource_path('views/vendor/rinvex/laravel-menus')], 'rinvex-menus-views');
     }
 }
