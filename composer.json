@@ -51,7 +51,7 @@
         "laravelcollective/html": "~5.7.0"
     },
     "require-dev": {
-        "codedungeon/phpunit-result-printer": "^0.22.0",
+        "codedungeon/phpunit-result-printer": "^0.23.0",
         "mockery/mockery": "^0.9.5",
         "orchestra/testbench": "^3.5.0",
         "phpunit/phpunit": "^7.0.0"
