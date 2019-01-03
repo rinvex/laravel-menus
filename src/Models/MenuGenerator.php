@@ -385,7 +385,7 @@ class MenuGenerator implements Countable
         $this->resolveItems($this->items);
 
         if (! is_null($this->view)) {
-            return $this->renderView($presenter, $specialSidebar);
+            return $this->renderView($presenter, $specialSidebar)->render();
         }
 
         (! $presenter || ! $this->presenterExists($presenter)) || $this->setPresenter($presenter);
