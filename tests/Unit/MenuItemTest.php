@@ -14,7 +14,7 @@ class MenuItemTest extends BaseTestCase
      */
     protected $menuManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->menuManager = app(MenuManager::class);
