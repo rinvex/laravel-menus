@@ -6,9 +6,12 @@ namespace Rinvex\Menus\Providers;
 
 use Rinvex\Menus\Models\MenuManager;
 use Illuminate\Support\ServiceProvider;
+use Rinvex\Support\Traits\ConsoleTools;
 
 class MenusServiceProvider extends ServiceProvider
 {
+    use ConsoleTools;
+
     /**
      * Bootstrap the application events.
      */
@@ -27,7 +30,7 @@ class MenusServiceProvider extends ServiceProvider
         $this->app['rinvex.menus.presenters']->put('adminlte', \Rinvex\Menus\Presenters\AdminltePresenter::class);
 
         // Publish Resources
-        ! $this->app->runningInConsole() || $this->publishResources();
+        ! $this->app->runningInConsole() || $this->publishesViews('rinvex/laravel-menus');
     }
 
     /**
@@ -42,15 +45,5 @@ class MenusServiceProvider extends ServiceProvider
         $this->app->singleton('rinvex.menus.presenters', function ($app) {
             return collect();
         });
-    }
-
-    /**
-     * Publish resources.
-     *
-     * @return void
-     */
-    protected function publishResources(): void
-    {
-        $this->publishes([realpath(__DIR__.'/../../resources/views') => resource_path('views/vendor/rinvex/laravel-menus')], 'rinvex-menus-views');
     }
 }
