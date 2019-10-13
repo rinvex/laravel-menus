@@ -410,7 +410,7 @@ class MenuItem
      */
     protected function hasActiveStateFromChilds(): bool
     {
-        return $this->getChilds()->contains(function (MenuItem $child) {
+        return $this->getChilds()->contains(function (self $child) {
             return ($child->hasChilds() && $child->hasActiveStateFromChilds())
                        || ($child->route && $child->hasActiveStateFromRoute())
                        || $child->isActive() || $child->hasActiveStateFromUrl();
