@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Rinvex\Menus\Models;
 
+use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
 use Collective\Html\HtmlFacade as HTML;
 use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Str;
 
 class MenuItem
 {
