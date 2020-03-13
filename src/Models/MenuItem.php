@@ -8,6 +8,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
 use Collective\Html\HtmlFacade as HTML;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Str;
 
 class MenuItem
 {
@@ -362,7 +363,7 @@ class MenuItem
     public function activateOnRoute(string $route)
     {
         $this->activeWhen = function () use ($route) {
-            return str_contains(Route::currentRouteName(), $route);
+            return Str::contains(Route::currentRouteName(), $route);
         };
 
         return $this;

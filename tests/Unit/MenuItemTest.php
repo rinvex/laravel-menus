@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rinvex\Menus\Tests\Unit;
 
+use Illuminate\Support\Arr;
 use Rinvex\Menus\Models\MenuItem;
 use Rinvex\Menus\Models\MenuManager;
 
@@ -120,7 +121,7 @@ class MenuItemTest extends BaseTestCase
         $children = $menuItem->getChilds()[0]->getChilds();
 
         $this->assertCount(1, $children);
-        $childMenuItem = array_first($children);
+        $childMenuItem = Arr::first($children);
         $this->assertEquals('settings.account', $childMenuItem->route[0]);
         $this->assertEquals(['user_id' => 1], $childMenuItem->route[1]);
     }
@@ -135,11 +136,11 @@ class MenuItemTest extends BaseTestCase
         $children = $menuItem->getChilds()[0]->getChilds();
 
         $this->assertCount(1, $children);
-        $childMenuItem = array_first($children);
+        $childMenuItem = Arr::first($children);
         $this->assertEquals('settings.account', $childMenuItem->route[0]);
         $this->assertEquals(['user_id' => 1], $childMenuItem->route[1]);
         $this->assertSame(1, $childMenuItem->order);
-        $id = md5(json_encode(array_except($childMenuItem->properties, ['attributes.id'])));
+        $id = md5(json_encode(Arr::except($childMenuItem->properties, ['attributes.id'])));
         $this->assertEquals(['my-attr' => 'value', 'id' => $id], $childMenuItem->attributes);
     }
 
@@ -153,7 +154,7 @@ class MenuItemTest extends BaseTestCase
         $children = $menuItem->getChilds()[0]->getChilds();
 
         $this->assertCount(1, $children);
-        $childMenuItem = array_first($children);
+        $childMenuItem = Arr::first($children);
         $this->assertEquals('settings/account', $childMenuItem->url);
         $this->assertEquals('Account', $childMenuItem->title);
     }
@@ -168,11 +169,11 @@ class MenuItemTest extends BaseTestCase
         $children = $menuItem->getChilds()[0]->getChilds();
 
         $this->assertCount(1, $children);
-        $childMenuItem = array_first($children);
+        $childMenuItem = Arr::first($children);
         $this->assertEquals('settings/account', $childMenuItem->url);
         $this->assertEquals('Account', $childMenuItem->title);
         $this->assertSame(1, $childMenuItem->order);
-        $id = md5(json_encode(array_except($childMenuItem->properties, ['attributes.id'])));
+        $id = md5(json_encode(Arr::except($childMenuItem->properties, ['attributes.id'])));
         $this->assertEquals(['my-attr' => 'value', 'id' => $id], $childMenuItem->attributes);
     }
 
@@ -228,7 +229,7 @@ class MenuItemTest extends BaseTestCase
             $sub->route(['settings.account'], 'Account');
         }, 'Dropdown item');
         $children = $menuItem->getChilds()[0]->getChilds();
-        $childMenuItem = array_first($children);
+        $childMenuItem = Arr::first($children);
 
         $this->assertEquals('http://localhost/settings/account', $childMenuItem->getUrl());
     }

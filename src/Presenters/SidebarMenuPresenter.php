@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rinvex\Menus\Presenters;
 
+use Illuminate\Support\Str;
 use Rinvex\Menus\Models\MenuItem;
 
 class SidebarMenuPresenter extends BasePresenter
@@ -66,7 +67,7 @@ class SidebarMenuPresenter extends BasePresenter
      */
     public function getMenuWithDropDownWrapper(MenuItem $item, bool $specialSidebar = false): string
     {
-        $id = str_random();
+        $id = Str::random();
 
         return $specialSidebar
             ? $this->getHeaderWrapper($item).$this->getChildMenuItems($item)
