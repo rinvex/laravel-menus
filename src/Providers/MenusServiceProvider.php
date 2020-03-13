@@ -30,7 +30,7 @@ class MenusServiceProvider extends ServiceProvider
         $this->app['rinvex.menus.presenters']->put('adminlte', \Rinvex\Menus\Presenters\AdminltePresenter::class);
 
         // Publish Resources
-        ! $this->app->runningInConsole() || $this->publishesViews('rinvex/laravel-menus');
+        $this->publishesViews('rinvex/laravel-menus');
     }
 
     /**

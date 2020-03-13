@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Rinvex\Menus\Models;
 
+use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Route;
 use Collective\Html\HtmlFacade as HTML;
@@ -362,7 +363,7 @@ class MenuItem
     public function activateOnRoute(string $route)
     {
         $this->activeWhen = function () use ($route) {
-            return str_contains(Route::currentRouteName(), $route);
+            return Str::contains(Route::currentRouteName(), $route);
         };
 
         return $this;
@@ -410,7 +411,7 @@ class MenuItem
      */
     protected function hasActiveStateFromChilds(): bool
     {
-        return $this->getChilds()->contains(function (MenuItem $child) {
+        return $this->getChilds()->contains(function (self $child) {
             return ($child->hasChilds() && $child->hasActiveStateFromChilds())
                        || ($child->route && $child->hasActiveStateFromRoute())
                        || $child->isActive() || $child->hasActiveStateFromUrl();
