@@ -55,7 +55,7 @@
     "require-dev": {
         "codedungeon/phpunit-result-printer": "^0.27.0",
         "mockery/mockery": "^0.9.5",
-        "orchestra/testbench": "^3.5.0",
+        "orchestra/testbench": "^5.0.0",
         "phpunit/phpunit": "^9.0.0"
     },
     "autoload": {
