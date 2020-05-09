@@ -158,7 +158,7 @@ class MenuItem
     {
         $type = 'header';
 
-        return $this->add(compact('type', 'url', 'title', 'order', 'icon', 'attributes'));
+        return $this->add(compact('type', 'title', 'order', 'icon', 'attributes'));
     }
 
     /**
