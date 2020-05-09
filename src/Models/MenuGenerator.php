@@ -89,15 +89,16 @@ class MenuGenerator implements Countable
      * @param string   $title
      * @param int      $order
      * @param string   $icon
+     * @param string   $type
      * @param array    $attributes
      * @param callable $callback
      *
      * @return \Rinvex\Menus\Models\MenuItem|null
      */
-    public function findByTitleOrAdd(string $title, int $order = null, string $icon = null, array $attributes = [], callable $callback = null): ?MenuItem
+    public function findByTitleOrAdd(string $title, int $order = null, string $icon = null, string $type = null, array $attributes = [], callable $callback = null): ?MenuItem
     {
         if (! ($item = $this->findBy('title', $title, $callback))) {
-            $item = $this->add(compact('title', 'order', 'icon', 'attributes'));
+            $item = $this->add(compact('type', 'title', 'order', 'icon', 'attributes'));
             ! is_callable($callback) || call_user_func($callback, $item);
         }
 
