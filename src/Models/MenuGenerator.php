@@ -337,7 +337,9 @@ class MenuGenerator implements Countable
      */
     public function divider(int $order = null, array $attributes = []): MenuItem
     {
-        return $this->add(['type' => 'divider', 'order' => $order, 'attributes' => $attributes]);
+        $type = 'divider';
+
+        return $this->add(compact('type', 'order', 'attributes'));
     }
 
     /**

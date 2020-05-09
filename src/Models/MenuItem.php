@@ -80,6 +80,21 @@ class MenuItem
     }
 
     /**
+     * Add new child item.
+     *
+     * @param array $properties
+     *
+     * @return static
+     */
+    protected function add(array $properties = [])
+    {
+        $properties['attributes']['id'] = $properties['attributes']['id'] ?? md5(json_encode($properties));
+        $this->childs->push($item = new static($properties));
+
+        return $item;
+    }
+
+    /**
      * Create new menu with dropdown.
      *
      * @param callable $callback
@@ -216,7 +231,7 @@ class MenuItem
      */
     public function hasChilds(): bool
     {
-        return $this->childs->isNotEmpty();
+        return $this->getChilds()->isNotEmpty();
     }
 
     /**
@@ -367,21 +382,6 @@ class MenuItem
         };
 
         return $this;
-    }
-
-    /**
-     * Add new child item.
-     *
-     * @param array $properties
-     *
-     * @return static
-     */
-    protected function add(array $properties = [])
-    {
-        $properties['attributes']['id'] = $properties['attributes']['id'] ?? md5(json_encode($properties));
-        $this->childs->push($item = new static($properties));
-
-        return $item;
     }
 
     /**
