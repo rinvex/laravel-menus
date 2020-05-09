@@ -372,10 +372,10 @@ class MenuGenerator implements Countable
      */
     protected function getOrderedItems(): Collection
     {
-        return $this->items->sortBy('properties.order')->each(function(MenuItem $parent) {
-            $parent->hideWhen(function() use ($parent) {
-                return ! $parent->getChilds()->reduce(function($carry, MenuItem $child) {
-                    return $carry || !$child->isHidden();
+        return $this->items->sortBy('properties.order')->each(function (MenuItem $parent) {
+            $parent->hideWhen(function () use ($parent) {
+                return ! $parent->getChilds()->reduce(function ($carry, MenuItem $child) {
+                    return $carry || ! $child->isHidden();
                 }, false);
             });
         });
