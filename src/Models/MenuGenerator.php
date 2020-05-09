@@ -379,8 +379,8 @@ class MenuGenerator implements Countable
     {
         return $this->items->sortBy('properties.order')->each(function(MenuItem $parent) {
             $parent->hideWhen(function() use ($parent) {
-                return ! $parent->getChilds()->reduce(function($carry, MenuItem $child) {
-                    return $carry || !$child->isHidden();
+                return in_array($parent->properties['type'], ['dropdown', 'header']) && ! $parent->getChilds()->reduce(function($carry, MenuItem $child) {
+                    return $carry || ! $child->isHidden();
                 }, false);
             });
         });
