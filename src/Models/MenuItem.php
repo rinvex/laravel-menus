@@ -107,7 +107,9 @@ class MenuItem
      */
     public function dropdown(callable $callback, string $title, int $order = null, string $icon = null, array $attributes = [])
     {
-        call_user_func($callback, $item = $this->add(compact('title', 'order', 'icon', 'attributes')));
+        $type = 'dropdown';
+
+        call_user_func($callback, $item = $this->add(compact('type', 'title', 'order', 'icon', 'attributes')));
 
         return $item;
     }
@@ -125,7 +127,9 @@ class MenuItem
      */
     public function route(array $route, string $title, int $order = null, string $icon = null, array $attributes = [])
     {
-        return $this->add(compact('route', 'title', 'order', 'icon', 'attributes'));
+        $type = 'route';
+
+        return $this->add(compact('type', 'route', 'title', 'order', 'icon', 'attributes'));
     }
 
     /**
@@ -141,7 +145,9 @@ class MenuItem
      */
     public function url(string $url, string $title, int $order = null, string $icon = null, array $attributes = [])
     {
-        return $this->add(compact('url', 'title', 'order', 'icon', 'attributes'));
+        $type = 'url';
+
+        return $this->add(compact('type', 'url', 'title', 'order', 'icon', 'attributes'));
     }
 
     /**
@@ -171,7 +177,9 @@ class MenuItem
      */
     public function divider(int $order = null, array $attributes = [])
     {
-        return $this->add(['type' => 'divider', 'order' => $order, 'attributes' => $attributes]);
+        $type = 'divider';
+
+        return $this->add(compact('type', 'order', 'attributes'));
     }
 
     /**
