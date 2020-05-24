@@ -129,8 +129,9 @@ class MenuManager implements Countable
                 $reflectionParams->shift();
 
                 collect($reflectionParams)->each(function ($param) use (&$params) {
+                    $name = $param->getClass()->getName();
                     $params[] = Route::current()->hasParameter($param->getName()) ? Route::current()->parameter($param->getName())
-                        : (class_exists($param->getClass()->getName()) ? app($param->getClass()->getName()) : null);
+                        : ((app()->bound($name) ?: class_exists($name) ?: interface_exists($name)) ? app($name) : null);
                 });
 
                 $params ? $callback($instance, ...$params) : $callback($instance);
