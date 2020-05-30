@@ -89,15 +89,16 @@ class MenuGenerator implements Countable
      * @param string   $title
      * @param int      $order
      * @param string   $icon
+     * @param string   $type
      * @param array    $attributes
      * @param callable $callback
      *
      * @return \Rinvex\Menus\Models\MenuItem|null
      */
-    public function findByTitleOrAdd(string $title, int $order = null, string $icon = null, array $attributes = [], callable $callback = null): ?MenuItem
+    public function findByTitleOrAdd(string $title, int $order = null, string $icon = null, string $type = null, array $attributes = [], callable $callback = null): ?MenuItem
     {
         if (! ($item = $this->findBy('title', $title, $callback))) {
-            $item = $this->add(compact('title', 'order', 'icon', 'attributes'));
+            $item = $this->add(compact('type', 'title', 'order', 'icon', 'attributes'));
             ! is_callable($callback) || call_user_func($callback, $item);
         }
 
@@ -271,7 +272,9 @@ class MenuGenerator implements Countable
      */
     public function dropdown(callable $callback, string $title, int $order = null, string $icon = null, array $attributes = []): MenuItem
     {
-        call_user_func($callback, $item = $this->add(compact('title', 'order', 'icon', 'attributes')));
+        $type = 'dropdown';
+
+        call_user_func($callback, $item = $this->add(compact('type', 'title', 'order', 'icon', 'attributes')));
 
         return $item;
     }
@@ -289,7 +292,9 @@ class MenuGenerator implements Countable
      */
     public function route(array $route, string $title, int $order = null, string $icon = null, array $attributes = []): MenuItem
     {
-        return $this->add(compact('route', 'title', 'order', 'icon', 'attributes'));
+        $type = 'route';
+
+        return $this->add(compact('type', 'route', 'title', 'order', 'icon', 'attributes'));
     }
 
     /**
@@ -305,9 +310,10 @@ class MenuGenerator implements Countable
      */
     public function url(string $url, string $title, int $order = null, string $icon = null, array $attributes = []): MenuItem
     {
+        $type = 'url';
         ! $this->urlPrefix || $url = $this->formatUrl($url);
 
-        return $this->add(compact('url', 'title', 'order', 'icon', 'attributes'));
+        return $this->add(compact('type', 'url', 'title', 'order', 'icon', 'attributes'));
     }
 
     /**
@@ -324,7 +330,7 @@ class MenuGenerator implements Countable
     {
         $type = 'header';
 
-        return $this->add(compact('type', 'url', 'title', 'order', 'icon', 'attributes'));
+        return $this->add(compact('type', 'title', 'order', 'icon', 'attributes'));
     }
 
     /**
@@ -337,7 +343,9 @@ class MenuGenerator implements Countable
      */
     public function divider(int $order = null, array $attributes = []): MenuItem
     {
-        return $this->add(['type' => 'divider', 'order' => $order, 'attributes' => $attributes]);
+        $type = 'divider';
+
+        return $this->add(compact('type', 'order', 'attributes'));
     }
 
     /**
@@ -369,7 +377,13 @@ class MenuGenerator implements Countable
      */
     protected function getOrderedItems(): Collection
     {
-        return $this->items->sortBy('properties.order');
+        return $this->items->sortBy('properties.order')->each(function (MenuItem $parent) {
+            $parent->hideWhen(function () use ($parent) {
+                return in_array($parent->properties['type'], ['dropdown', 'header']) && ! $parent->getChilds()->reduce(function ($carry, MenuItem $child) {
+                    return $carry || ! $child->isHidden();
+                }, false);
+            });
+        });
     }
 
     /**
