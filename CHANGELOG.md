@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](CONTRIBUTING.md).
 
 
+## [v4.0.4] - 2020-05-30
+- Remove undefined $url variable
+- Allow specifying menu type when calling findByTitleOrAdd
+- Hide parent menu if it doesn't have any visible items
+- Add menu type to all items for easier identification
+- Fix hide logic for hiding parent items without visible children, only if type is dropdown or header
+- Remove default indent size config
+- Add support for interface based service binding
+
 ## [v4.0.3] - 2020-04-04
 - Fix namespace issue
 
@@ -70,6 +79,7 @@ This project adheres to [Semantic Versioning](CONTRIBUTING.md).
 ## v0.0.1 - 2018-02-18
 - Tag first release
 
+[v4.0.4]: https://github.com/rinvex/laravel-menus/compare/v4.0.3...v4.0.4
 [v4.0.3]: https://github.com/rinvex/laravel-menus/compare/v4.0.2...v4.0.3
 [v4.0.2]: https://github.com/rinvex/laravel-menus/compare/v4.0.1...v4.0.2
 [v4.0.1]: https://github.com/rinvex/laravel-menus/compare/v4.0.0...v4.0.1
