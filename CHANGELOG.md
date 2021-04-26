@@ -5,6 +5,9 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](CONTRIBUTING.md).
 
 
+## [v5.0.2] - 2021-04-27
+- Fix PHP v8.x compatibility issue
+
 ## [v5.0.1] - 2020-12-25
 - Add support for PHP v8
 
@@ -88,6 +91,7 @@ This project adheres to [Semantic Versioning](CONTRIBUTING.md).
 ## v0.0.1 - 2018-02-18
 - Tag first release
 
+[v5.0.2]: https://github.com/rinvex/laravel-menus/compare/v5.0.1...v5.0.2
 [v5.0.1]: https://github.com/rinvex/laravel-menus/compare/v5.0.0...v5.0.1
 [v5.0.0]: https://github.com/rinvex/laravel-menus/compare/v4.1.0...v5.0.0
 [v4.1.0]: https://github.com/rinvex/laravel-menus/compare/v4.0.4...v4.1.0
