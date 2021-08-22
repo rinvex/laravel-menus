@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](CONTRIBUTING.md).
 
 
+## [v6.0.0] - 2021-08-22
+- Drop PHP v7 support, and upgrade rinvex package dependencies to next major version
+- Update composer dependencies
+- Upgrade to GitHub-native Dependabot
+- Use app() method alias `has` instead of `bound` for better readability
+
 ## [v5.0.2] - 2021-04-27
 - Fix PHP v8.x compatibility issue
 
@@ -91,6 +97,7 @@ This project adheres to [Semantic Versioning](CONTRIBUTING.md).
 ## v0.0.1 - 2018-02-18
 - Tag first release
 
+[v6.0.0]: https://github.com/rinvex/laravel-menus/compare/v5.0.2...v6.0.0
 [v5.0.2]: https://github.com/rinvex/laravel-menus/compare/v5.0.1...v5.0.2
 [v5.0.1]: https://github.com/rinvex/laravel-menus/compare/v5.0.0...v5.0.1
 [v5.0.0]: https://github.com/rinvex/laravel-menus/compare/v4.1.0...v5.0.0
