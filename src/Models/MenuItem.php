@@ -278,7 +278,7 @@ class MenuItem
     public function ifCan(string $ability, $params = null, $guard = null)
     {
         $this->hideCallbacks->push(function () use ($ability, $params, $guard) {
-            return ! optional(auth()->guard($guard)->user())->can($ability, $params);
+            return ! auth()->guard($guard)->user()?->can($ability, $params);
         });
 
         return $this;
