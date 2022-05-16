@@ -39,6 +39,7 @@ class MenuItemTest extends BaseTestCase
             'type' => 'my-menu-item',
             'icon' => 'fa fa-user',
             'attributes' => [],
+            'itemAttributes' => [],
             'order' => 1,
         ];
         $menuItem = new MenuItem($properties);
@@ -56,6 +57,7 @@ class MenuItemTest extends BaseTestCase
             'type' => 'my-menu-item',
             'icon' => 'fa fa-user',
             'attributes' => [],
+            'itemAttributes' => [],
             'active' => false,
             'order' => 1,
         ];
@@ -67,6 +69,7 @@ class MenuItemTest extends BaseTestCase
         $this->assertEquals('my-menu-item', $menuItem->type);
         $this->assertEquals('fa fa-user', $menuItem->icon);
         $this->assertSame([], $menuItem->attributes);
+        $this->assertSame([], $menuItem->itemAttributes);
         $this->assertSame(1, $menuItem->order);
     }
 
@@ -259,7 +262,7 @@ class MenuItemTest extends BaseTestCase
     }
 
     /** @test */
-    public function it_can_get_item_html_attributes()
+    public function it_can_get_link_attributes()
     {
         $menuItem = new MenuItem([
             'url' => 'settings/account',
@@ -268,6 +271,18 @@ class MenuItemTest extends BaseTestCase
         ]);
 
         $this->assertEquals(' my-attr="value"', $menuItem->getAttributes());
+    }
+
+    /** @test */
+    public function it_can_get_item_attributes()
+    {
+        $menuItem = new MenuItem([
+            'url' => 'settings/account',
+            'title' => 'Parent Item',
+            'itemAttributes' => ['my-attr' => 'value'],
+        ]);
+
+        $this->assertEquals(' my-attr="value"', $menuItem->getItemAttributes());
     }
 
     /** @test */

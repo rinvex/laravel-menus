@@ -3,7 +3,7 @@
 @elseif ($item->isHeader())
     <li class="dropdown-header">{{ $item->title }}</li>
 @else
-    <li class="{{ $item->isActive() ? 'active' : '' }}">
+    <li {{ $item->getItemAttributes() }}>
         <a href="{{ $item->getUrl() }}" {!! $item->getAttributes() !!}>
             @if ($item->icon)<i class="{{ $this->icon }}"></i>@endif
             {{ $item->title }}

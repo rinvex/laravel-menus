@@ -71,7 +71,7 @@ Menu::register('frontend.sidebar', function(MenuGenerator $menu) {
 });
 ```
 
-All the `url`, `route`, `header`, and `dropdown` methods has a standard API like: `$menu->method('data', 'title', 'order', 'icon', 'attributes')` that's intutive and self explanatory. Only the first parameter is mandatory and different for each method, but the rest are all the same and optional. `header` accepts string title, `url`: string link, `route`: array with string route name and optionally route parameters, `dropdown`: callback for child items definition, other parameters are optional.
+All the `url`, `route`, `header`, and `dropdown` methods has a standard API like: `$menu->method('data', 'title', 'order', 'icon', 'attributes', 'itemAttributes')` that's intutive and self explanatory. Only the first parameter is mandatory and different for each method, but the rest are all the same and optional. `header` accepts string title, `url`: string link, `route`: array with string route name and optionally route parameters, `dropdown`: callback for child items definition, other parameters are optional.
 
 > **Notes:**
 > - Menu items are ordered in ascending order by default. If you don't need sorting, just ignore the `order` parameter when defining your menus as it's optional anyway. That way menu items will be displayed in the order they've been added.

@@ -105,11 +105,11 @@ class MenuItem
      *
      * @return static
      */
-    public function dropdown(callable $callback, string $title, int $order = null, string $icon = null, array $attributes = [])
+    public function dropdown(callable $callback, string $title, int $order = null, string $icon = null, array $attributes = [], array $itemAttributes = [])
     {
         $type = 'dropdown';
 
-        call_user_func($callback, $item = $this->add(compact('type', 'title', 'order', 'icon', 'attributes')));
+        call_user_func($callback, $item = $this->add(compact('type', 'title', 'order', 'icon', 'attributes', 'itemAttributes')));
 
         return $item;
     }
@@ -125,11 +125,11 @@ class MenuItem
      *
      * @return static
      */
-    public function route(array $route, string $title, int $order = null, string $icon = null, array $attributes = [])
+    public function route(array $route, string $title, int $order = null, string $icon = null, array $attributes = [], array $itemAttributes = [])
     {
         $type = 'route';
 
-        return $this->add(compact('type', 'route', 'title', 'order', 'icon', 'attributes'));
+        return $this->add(compact('type', 'route', 'title', 'order', 'icon', 'attributes', 'itemAttributes'));
     }
 
     /**
@@ -143,11 +143,11 @@ class MenuItem
      *
      * @return static
      */
-    public function url(string $url, string $title, int $order = null, string $icon = null, array $attributes = [])
+    public function url(string $url, string $title, int $order = null, string $icon = null, array $attributes = [], array $itemAttributes = [])
     {
         $type = 'url';
 
-        return $this->add(compact('type', 'url', 'title', 'order', 'icon', 'attributes'));
+        return $this->add(compact('type', 'url', 'title', 'order', 'icon', 'attributes', 'itemAttributes'));
     }
 
     /**
@@ -160,11 +160,11 @@ class MenuItem
      *
      * @return static
      */
-    public function header(string $title, int $order = null, string $icon = null, array $attributes = [])
+    public function header(string $title, int $order = null, string $icon = null, array $attributes = [], array $itemAttributes = [])
     {
         $type = 'header';
 
-        return $this->add(compact('type', 'title', 'order', 'icon', 'attributes'));
+        return $this->add(compact('type', 'title', 'order', 'icon', 'attributes', 'itemAttributes'));
     }
 
     /**
@@ -175,11 +175,11 @@ class MenuItem
      *
      * @return static
      */
-    public function divider(int $order = null, array $attributes = [])
+    public function divider(int $order = null, array $attributes = [], array $itemAttributes = [])
     {
         $type = 'divider';
 
-        return $this->add(compact('type', 'order', 'attributes'));
+        return $this->add(compact('type', 'order', 'attributes', 'itemAttributes'));
     }
 
     /**
@@ -210,6 +210,20 @@ class MenuItem
     public function getAttributes()
     {
         return HTML::attributes($this->attributes);
+    }
+
+    /**
+     * Get HTML parent attribute data.
+     *
+     * @return mixed
+     */
+    public function getItemAttributes()
+    {
+        $itemAttributes = $this->itemAttributes;
+
+        (empty($itemAttributes['class']) && ! $this->isActive()) || $itemAttributes['class'][] = $this->isActive() ? 'active' : '';
+
+        return HTML::attributes($itemAttributes);
     }
 
     /**

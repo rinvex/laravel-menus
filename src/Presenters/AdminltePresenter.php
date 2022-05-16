@@ -45,7 +45,7 @@ class AdminltePresenter extends BasePresenter
      */
     public function getMenuWithoutDropdownWrapper(MenuItem $item): string
     {
-        return '<li class="'.($item->isActive() ? 'active' : '').'">
+        return '<li '.$item->getItemAttributes().'>
                     <a href="'.$item->getUrl().'" '.$item->getAttributes().'>
                         '.($item->icon ? '<i class="'.$item->icon.'"></i>' : '').'
                         <span>'.$item->title.'</span>
