@@ -71,11 +71,11 @@ Menu::register('frontend.sidebar', function(MenuGenerator $menu) {
 });
 ```
 
-All the `url`, `route`, `header`, and `dropdown` methods has a standard API like: `$menu->method('data', 'title', 'order', 'icon', 'attributes', 'itemAttributes')` that's intutive and self explanatory. Only the first parameter is mandatory and different for each method, but the rest are all the same and optional. `header` accepts string title, `url`: string link, `route`: array with string route name and optionally route parameters, `dropdown`: callback for child items definition, other parameters are optional.
+All the `url`, `route`, `header`, and `dropdown` methods has a standard API like: `$menu->method('data', 'title', 'order', 'icon', 'linkAttributes', 'itemAttributes')` that's intutive and self explanatory. Only the first parameter is mandatory and different for each method, but the rest are all the same and optional. `header` accepts string title, `url`: string link, `route`: array with string route name and optionally route parameters, `dropdown`: callback for child items definition, other parameters are optional.
 
 > **Notes:**
 > - Menu items are ordered in ascending order by default. If you don't need sorting, just ignore the `order` parameter when defining your menus as it's optional anyway. That way menu items will be displayed in the order they've been added.
-> - The `icon` parameter takes a css class name, like `fa fa-user` for fontawesome, and the `attributes` parameter takes array of any additional HTML attributes you would like to add to your menu item.
+> - The `icon` parameter takes a css class name, like `fa fa-user` for fontawesome, and the `linkAttributes` parameter takes array of any additional HTML attributes you would like to add to your menu item.
 > - You can create a multi-level menu items by creating child dropdown menus inside parent dropdown menus, and it has no limit, so you can create the structure you need as deep as you want.
 > - You can create multiple menus with different names using the `Menu::register()` method, and call them in different places. Like if you want a topbar menu, and a sidebar menu ..etc
 

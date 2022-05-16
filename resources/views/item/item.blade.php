@@ -4,7 +4,7 @@
     <li class="dropdown-header">{{ $item->title }}</li>
 @else
     <li {{ $item->getItemAttributes() }}>
-        <a href="{{ $item->getUrl() }}" {!! $item->getAttributes() !!}>
+        <a href="{{ $item->getUrl() }}" {!! $item->getLinkAttributes() !!}>
             @if ($item->icon)<i class="{{ $this->icon }}"></i>@endif
             {{ $item->title }}
         </a>

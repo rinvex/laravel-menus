@@ -90,16 +90,16 @@ class MenuGenerator implements Countable
      * @param int|null      $order
      * @param string|null   $icon
      * @param string|null   $type
-     * @param array         $attributes
+     * @param array         $linkAttributes
      * @param array         $itemAttributes
      * @param callable|null $callback
      *
      * @return \Rinvex\Menus\Models\MenuItem|null
      */
-    public function findByTitleOrAdd(string $title, int $order = null, string $icon = null, string $type = null, array $attributes = [], array $itemAttributes = [], callable $callback = null): ?MenuItem
+    public function findByTitleOrAdd(string $title, int $order = null, string $icon = null, string $type = null, array $linkAttributes = [], array $itemAttributes = [], callable $callback = null): ?MenuItem
     {
         if (! ($item = $this->findBy('title', $title, $callback))) {
-            $item = $this->add(compact('type', 'title', 'order', 'icon', 'attributes', 'itemAttributes'));
+            $item = $this->add(compact('type', 'title', 'order', 'icon', 'linkAttributes', 'itemAttributes'));
             ! is_callable($callback) || call_user_func($callback, $item);
         }
 
@@ -254,7 +254,7 @@ class MenuGenerator implements Countable
      */
     protected function add(array $properties = []): MenuItem
     {
-        $properties['attributes']['id'] = $properties['attributes']['id'] ?? md5(json_encode($properties));
+        $properties['linkAttributes']['id'] = $properties['linkAttributes']['id'] ?? md5(json_encode($properties));
         $this->items->push($item = new MenuItem($properties));
 
         return $item;
@@ -267,16 +267,16 @@ class MenuGenerator implements Countable
      * @param string      $title
      * @param int|null    $order
      * @param string|null $icon
-     * @param array       $attributes
+     * @param array       $linkAttributes
      * @param array       $itemAttributes
      *
      * @return \Rinvex\Menus\Models\MenuItem
      */
-    public function dropdown(callable $callback, string $title, int $order = null, string $icon = null, array $attributes = [], array $itemAttributes = []): MenuItem
+    public function dropdown(callable $callback, string $title, int $order = null, string $icon = null, array $linkAttributes = [], array $itemAttributes = []): MenuItem
     {
         $type = 'dropdown';
 
-        call_user_func($callback, $item = $this->add(compact('type', 'title', 'order', 'icon', 'attributes', 'itemAttributes')));
+        call_user_func($callback, $item = $this->add(compact('type', 'title', 'order', 'icon', 'linkAttributes', 'itemAttributes')));
 
         return $item;
     }
@@ -288,16 +288,16 @@ class MenuGenerator implements Countable
      * @param string      $title
      * @param int|null    $order
      * @param string|null $icon
-     * @param array       $attributes
+     * @param array       $linkAttributes
      * @param array       $itemAttributes
      *
      * @return \Rinvex\Menus\Models\MenuItem
      */
-    public function route(array $route, string $title, int $order = null, string $icon = null, array $attributes = [], array $itemAttributes = []): MenuItem
+    public function route(array $route, string $title, int $order = null, string $icon = null, array $linkAttributes = [], array $itemAttributes = []): MenuItem
     {
         $type = 'route';
 
-        return $this->add(compact('type', 'route', 'title', 'order', 'icon', 'attributes', 'itemAttributes'));
+        return $this->add(compact('type', 'route', 'title', 'order', 'icon', 'linkAttributes', 'itemAttributes'));
     }
 
     /**
@@ -307,17 +307,17 @@ class MenuGenerator implements Countable
      * @param string      $title
      * @param int|null    $order
      * @param string|null $icon
-     * @param array       $attributes
+     * @param array       $linkAttributes
      * @param array       $itemAttributes
      *
      * @return \Rinvex\Menus\Models\MenuItem
      */
-    public function url(string $url, string $title, int $order = null, string $icon = null, array $attributes = [], array $itemAttributes = []): MenuItem
+    public function url(string $url, string $title, int $order = null, string $icon = null, array $linkAttributes = [], array $itemAttributes = []): MenuItem
     {
         $type = 'url';
         ! $this->urlPrefix || $url = $this->formatUrl($url);
 
-        return $this->add(compact('type', 'url', 'title', 'order', 'icon', 'attributes', 'itemAttributes'));
+        return $this->add(compact('type', 'url', 'title', 'order', 'icon', 'linkAttributes', 'itemAttributes'));
     }
 
     /**
@@ -326,31 +326,31 @@ class MenuGenerator implements Countable
      * @param string      $title
      * @param int|null    $order
      * @param string|null $icon
-     * @param array       $attributes
+     * @param array       $linkAttributes
      * @param array       $itemAttributes
      *
      * @return \Rinvex\Menus\Models\MenuItem
      */
-    public function header(string $title, int $order = null, string $icon = null, array $attributes = [], array $itemAttributes = []): MenuItem
+    public function header(string $title, int $order = null, string $icon = null, array $linkAttributes = [], array $itemAttributes = []): MenuItem
     {
         $type = 'header';
 
-        return $this->add(compact('type', 'title', 'order', 'icon', 'attributes', 'itemAttributes'));
+        return $this->add(compact('type', 'title', 'order', 'icon', 'linkAttributes', 'itemAttributes'));
     }
 
     /**
      * Add new divider item.
      *
      * @param int   $order
-     * @param array $attributes
+     * @param array $linkAttributes
      *
      * @return \Rinvex\Menus\Models\MenuItem
      */
-    public function divider(int $order = null, array $attributes = [], array $itemAttributes = []): MenuItem
+    public function divider(int $order = null, array $linkAttributes = [], array $itemAttributes = []): MenuItem
     {
         $type = 'divider';
 
-        return $this->add(compact('type', 'order', 'attributes', 'itemAttributes'));
+        return $this->add(compact('type', 'order', 'linkAttributes', 'itemAttributes'));
     }
 
     /**
