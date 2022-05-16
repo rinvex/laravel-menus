@@ -97,11 +97,12 @@ class MenuItem
     /**
      * Create new menu with dropdown.
      *
-     * @param callable $callback
-     * @param string   $title
-     * @param int      $order
-     * @param string   $icon
-     * @param array    $attributes
+     * @param callable    $callback
+     * @param string      $title
+     * @param int|null    $order
+     * @param string|null $icon
+     * @param array       $attributes
+     * @param array       $itemAttributes
      *
      * @return static
      */
@@ -117,11 +118,12 @@ class MenuItem
     /**
      * Register new menu item using registered route.
      *
-     * @param string $route
-     * @param string $title
-     * @param int    $order
-     * @param string $icon
-     * @param array  $attributes
+     * @param array       $route
+     * @param string      $title
+     * @param int|null    $order
+     * @param string|null $icon
+     * @param array       $attributes
+     * @param array       $itemAttributes
      *
      * @return static
      */
@@ -135,11 +137,12 @@ class MenuItem
     /**
      * Register new menu item using url.
      *
-     * @param string $url
-     * @param string $title
-     * @param int    $order
-     * @param string $icon
-     * @param array  $attributes
+     * @param string      $url
+     * @param string      $title
+     * @param int|null    $order
+     * @param string|null $icon
+     * @param array       $attributes
+     * @param array       $itemAttributes
      *
      * @return static
      */
@@ -153,10 +156,11 @@ class MenuItem
     /**
      * Add new header item.
      *
-     * @param string $title
-     * @param int    $order
-     * @param string $icon
-     * @param array  $attributes
+     * @param string      $title
+     * @param int|null    $order
+     * @param string|null $icon
+     * @param array       $attributes
+     * @param array       $itemAttributes
      *
      * @return static
      */
@@ -170,8 +174,9 @@ class MenuItem
     /**
      * Add new divider item.
      *
-     * @param int   $order
-     * @param array $attributes
+     * @param int|null $order
+     * @param array    $attributes
+     * @param array    $itemAttributes
      *
      * @return static
      */

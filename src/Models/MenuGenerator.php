@@ -86,12 +86,13 @@ class MenuGenerator implements Countable
     /**
      * Find menu item by given key and value.
      *
-     * @param string   $title
-     * @param int      $order
-     * @param string   $icon
-     * @param string   $type
-     * @param array    $attributes
-     * @param callable $callback
+     * @param string        $title
+     * @param int|null      $order
+     * @param string|null   $icon
+     * @param string|null   $type
+     * @param array         $attributes
+     * @param array         $itemAttributes
+     * @param callable|null $callback
      *
      * @return \Rinvex\Menus\Models\MenuItem|null
      */
@@ -262,11 +263,12 @@ class MenuGenerator implements Countable
     /**
      * Create new menu with dropdown.
      *
-     * @param callable $callback
-     * @param string   $title
-     * @param int      $order
-     * @param string   $icon
-     * @param array    $attributes
+     * @param callable    $callback
+     * @param string      $title
+     * @param int|null    $order
+     * @param string|null $icon
+     * @param array       $attributes
+     * @param array       $itemAttributes
      *
      * @return \Rinvex\Menus\Models\MenuItem
      */
@@ -282,11 +284,12 @@ class MenuGenerator implements Countable
     /**
      * Register new menu item using registered route.
      *
-     * @param string $route
-     * @param string $title
-     * @param int    $order
-     * @param string $icon
-     * @param array  $attributes
+     * @param array       $route
+     * @param string      $title
+     * @param int|null    $order
+     * @param string|null $icon
+     * @param array       $attributes
+     * @param array       $itemAttributes
      *
      * @return \Rinvex\Menus\Models\MenuItem
      */
@@ -300,11 +303,12 @@ class MenuGenerator implements Countable
     /**
      * Register new menu item using url.
      *
-     * @param string $url
-     * @param string $title
-     * @param int    $order
-     * @param string $icon
-     * @param array  $attributes
+     * @param string      $url
+     * @param string      $title
+     * @param int|null    $order
+     * @param string|null $icon
+     * @param array       $attributes
+     * @param array       $itemAttributes
      *
      * @return \Rinvex\Menus\Models\MenuItem
      */
@@ -319,10 +323,11 @@ class MenuGenerator implements Countable
     /**
      * Add new header item.
      *
-     * @param string $title
-     * @param int    $order
-     * @param string $icon
-     * @param array  $attributes
+     * @param string      $title
+     * @param int|null    $order
+     * @param string|null $icon
+     * @param array       $attributes
+     * @param array       $itemAttributes
      *
      * @return \Rinvex\Menus\Models\MenuItem
      */
@@ -389,8 +394,8 @@ class MenuGenerator implements Countable
     /**
      * Render the menu to HTML tag.
      *
-     * @param string $presenter
-     * @param bool   $specialSidebar
+     * @param string|null $presenter
+     * @param bool        $specialSidebar
      *
      * @return string
      */
