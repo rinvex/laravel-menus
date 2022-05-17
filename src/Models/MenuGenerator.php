@@ -86,19 +86,20 @@ class MenuGenerator implements Countable
     /**
      * Find menu item by given key and value.
      *
-     * @param string   $title
-     * @param int      $order
-     * @param string   $icon
-     * @param string   $type
-     * @param array    $attributes
-     * @param callable $callback
+     * @param string        $title
+     * @param int|null      $order
+     * @param string|null   $icon
+     * @param string|null   $type
+     * @param array         $linkAttributes
+     * @param array         $itemAttributes
+     * @param callable|null $callback
      *
      * @return \Rinvex\Menus\Models\MenuItem|null
      */
-    public function findByTitleOrAdd(string $title, int $order = null, string $icon = null, string $type = null, array $attributes = [], callable $callback = null): ?MenuItem
+    public function findByTitleOrAdd(string $title, int $order = null, string $icon = null, string $type = null, array $linkAttributes = [], array $itemAttributes = [], callable $callback = null): ?MenuItem
     {
         if (! ($item = $this->findBy('title', $title, $callback))) {
-            $item = $this->add(compact('type', 'title', 'order', 'icon', 'attributes'));
+            $item = $this->add(compact('type', 'title', 'order', 'icon', 'linkAttributes', 'itemAttributes'));
             ! is_callable($callback) || call_user_func($callback, $item);
         }
 
@@ -253,7 +254,7 @@ class MenuGenerator implements Countable
      */
     protected function add(array $properties = []): MenuItem
     {
-        $properties['attributes']['id'] = $properties['attributes']['id'] ?? md5(json_encode($properties));
+        $properties['linkAttributes']['id'] = $properties['linkAttributes']['id'] ?? md5(json_encode($properties));
         $this->items->push($item = new MenuItem($properties));
 
         return $item;
@@ -262,19 +263,20 @@ class MenuGenerator implements Countable
     /**
      * Create new menu with dropdown.
      *
-     * @param callable $callback
-     * @param string   $title
-     * @param int      $order
-     * @param string   $icon
-     * @param array    $attributes
+     * @param callable    $callback
+     * @param string      $title
+     * @param int|null    $order
+     * @param string|null $icon
+     * @param array       $linkAttributes
+     * @param array       $itemAttributes
      *
      * @return \Rinvex\Menus\Models\MenuItem
      */
-    public function dropdown(callable $callback, string $title, int $order = null, string $icon = null, array $attributes = []): MenuItem
+    public function dropdown(callable $callback, string $title, int $order = null, string $icon = null, array $linkAttributes = [], array $itemAttributes = []): MenuItem
     {
         $type = 'dropdown';
 
-        call_user_func($callback, $item = $this->add(compact('type', 'title', 'order', 'icon', 'attributes')));
+        call_user_func($callback, $item = $this->add(compact('type', 'title', 'order', 'icon', 'linkAttributes', 'itemAttributes')));
 
         return $item;
     }
@@ -282,70 +284,73 @@ class MenuGenerator implements Countable
     /**
      * Register new menu item using registered route.
      *
-     * @param string $route
-     * @param string $title
-     * @param int    $order
-     * @param string $icon
-     * @param array  $attributes
+     * @param array       $route
+     * @param string      $title
+     * @param int|null    $order
+     * @param string|null $icon
+     * @param array       $linkAttributes
+     * @param array       $itemAttributes
      *
      * @return \Rinvex\Menus\Models\MenuItem
      */
-    public function route(array $route, string $title, int $order = null, string $icon = null, array $attributes = []): MenuItem
+    public function route(array $route, string $title, int $order = null, string $icon = null, array $linkAttributes = [], array $itemAttributes = []): MenuItem
     {
         $type = 'route';
 
-        return $this->add(compact('type', 'route', 'title', 'order', 'icon', 'attributes'));
+        return $this->add(compact('type', 'route', 'title', 'order', 'icon', 'linkAttributes', 'itemAttributes'));
     }
 
     /**
      * Register new menu item using url.
      *
-     * @param string $url
-     * @param string $title
-     * @param int    $order
-     * @param string $icon
-     * @param array  $attributes
+     * @param string      $url
+     * @param string      $title
+     * @param int|null    $order
+     * @param string|null $icon
+     * @param array       $linkAttributes
+     * @param array       $itemAttributes
      *
      * @return \Rinvex\Menus\Models\MenuItem
      */
-    public function url(string $url, string $title, int $order = null, string $icon = null, array $attributes = []): MenuItem
+    public function url(string $url, string $title, int $order = null, string $icon = null, array $linkAttributes = [], array $itemAttributes = []): MenuItem
     {
         $type = 'url';
         ! $this->urlPrefix || $url = $this->formatUrl($url);
 
-        return $this->add(compact('type', 'url', 'title', 'order', 'icon', 'attributes'));
+        return $this->add(compact('type', 'url', 'title', 'order', 'icon', 'linkAttributes', 'itemAttributes'));
     }
 
     /**
      * Add new header item.
      *
-     * @param string $title
-     * @param int    $order
-     * @param string $icon
-     * @param array  $attributes
+     * @param string      $title
+     * @param int|null    $order
+     * @param string|null $icon
+     * @param array       $linkAttributes
+     * @param array       $itemAttributes
      *
      * @return \Rinvex\Menus\Models\MenuItem
      */
-    public function header(string $title, int $order = null, string $icon = null, array $attributes = []): MenuItem
+    public function header(string $title, int $order = null, string $icon = null, array $linkAttributes = [], array $itemAttributes = []): MenuItem
     {
         $type = 'header';
 
-        return $this->add(compact('type', 'title', 'order', 'icon', 'attributes'));
+        return $this->add(compact('type', 'title', 'order', 'icon', 'linkAttributes', 'itemAttributes'));
     }
 
     /**
      * Add new divider item.
      *
-     * @param int   $order
-     * @param array $attributes
+     * @param int|null $order
+     * @param array    $itemAttributes
      *
      * @return \Rinvex\Menus\Models\MenuItem
      */
-    public function divider(int $order = null, array $attributes = []): MenuItem
+    public function divider(int $order = null, array $itemAttributes = []): MenuItem
     {
         $type = 'divider';
 
-        return $this->add(compact('type', 'order', 'attributes'));
+        return $this->add(compact('type', 'order', 'itemAttributes'));
     }
 
     /**
@@ -389,8 +394,8 @@ class MenuGenerator implements Countable
     /**
      * Render the menu to HTML tag.
      *
-     * @param string $presenter
-     * @param bool   $specialSidebar
+     * @param string|null $presenter
+     * @param bool        $specialSidebar
      *
      * @return string
      */

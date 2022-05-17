@@ -88,7 +88,7 @@ class MenuItem
      */
     protected function add(array $properties = [])
     {
-        $properties['attributes']['id'] = $properties['attributes']['id'] ?? md5(json_encode($properties));
+        $properties['linkAttributes']['id'] = $properties['linkAttributes']['id'] ?? md5(json_encode($properties));
         $this->childs->push($item = new static($properties));
 
         return $item;
@@ -97,19 +97,20 @@ class MenuItem
     /**
      * Create new menu with dropdown.
      *
-     * @param callable $callback
-     * @param string   $title
-     * @param int      $order
-     * @param string   $icon
-     * @param array    $attributes
+     * @param callable    $callback
+     * @param string      $title
+     * @param int|null    $order
+     * @param string|null $icon
+     * @param array       $linkAttributes
+     * @param array       $itemAttributes
      *
      * @return static
      */
-    public function dropdown(callable $callback, string $title, int $order = null, string $icon = null, array $attributes = [])
+    public function dropdown(callable $callback, string $title, int $order = null, string $icon = null, array $linkAttributes = [], array $itemAttributes = [])
     {
         $type = 'dropdown';
 
-        call_user_func($callback, $item = $this->add(compact('type', 'title', 'order', 'icon', 'attributes')));
+        call_user_func($callback, $item = $this->add(compact('type', 'title', 'order', 'icon', 'linkAttributes', 'itemAttributes')));
 
         return $item;
     }
@@ -117,69 +118,72 @@ class MenuItem
     /**
      * Register new menu item using registered route.
      *
-     * @param string $route
-     * @param string $title
-     * @param int    $order
-     * @param string $icon
-     * @param array  $attributes
+     * @param array       $route
+     * @param string      $title
+     * @param int|null    $order
+     * @param string|null $icon
+     * @param array       $linkAttributes
+     * @param array       $itemAttributes
      *
      * @return static
      */
-    public function route(array $route, string $title, int $order = null, string $icon = null, array $attributes = [])
+    public function route(array $route, string $title, int $order = null, string $icon = null, array $linkAttributes = [], array $itemAttributes = [])
     {
         $type = 'route';
 
-        return $this->add(compact('type', 'route', 'title', 'order', 'icon', 'attributes'));
+        return $this->add(compact('type', 'route', 'title', 'order', 'icon', 'linkAttributes', 'itemAttributes'));
     }
 
     /**
      * Register new menu item using url.
      *
-     * @param string $url
-     * @param string $title
-     * @param int    $order
-     * @param string $icon
-     * @param array  $attributes
+     * @param string      $url
+     * @param string      $title
+     * @param int|null    $order
+     * @param string|null $icon
+     * @param array       $linkAttributes
+     * @param array       $itemAttributes
      *
      * @return static
      */
-    public function url(string $url, string $title, int $order = null, string $icon = null, array $attributes = [])
+    public function url(string $url, string $title, int $order = null, string $icon = null, array $linkAttributes = [], array $itemAttributes = [])
     {
         $type = 'url';
 
-        return $this->add(compact('type', 'url', 'title', 'order', 'icon', 'attributes'));
+        return $this->add(compact('type', 'url', 'title', 'order', 'icon', 'linkAttributes', 'itemAttributes'));
     }
 
     /**
      * Add new header item.
      *
-     * @param string $title
-     * @param int    $order
-     * @param string $icon
-     * @param array  $attributes
+     * @param string      $title
+     * @param int|null    $order
+     * @param string|null $icon
+     * @param array       $linkAttributes
+     * @param array       $itemAttributes
      *
      * @return static
      */
-    public function header(string $title, int $order = null, string $icon = null, array $attributes = [])
+    public function header(string $title, int $order = null, string $icon = null, array $linkAttributes = [], array $itemAttributes = [])
     {
         $type = 'header';
 
-        return $this->add(compact('type', 'title', 'order', 'icon', 'attributes'));
+        return $this->add(compact('type', 'title', 'order', 'icon', 'linkAttributes', 'itemAttributes'));
     }
 
     /**
      * Add new divider item.
      *
-     * @param int   $order
-     * @param array $attributes
+     * @param int|null $order
+     * @param array    $itemAttributes
      *
      * @return static
      */
-    public function divider(int $order = null, array $attributes = [])
+    public function divider(int $order = null, array $itemAttributes = [])
     {
         $type = 'divider';
 
-        return $this->add(compact('type', 'order', 'attributes'));
+        return $this->add(compact('type', 'order', 'itemAttributes'));
     }
 
     /**
@@ -207,9 +211,23 @@ class MenuItem
      *
      * @return mixed
      */
-    public function getAttributes()
+    public function getLinkAttributes()
     {
-        return HTML::attributes($this->attributes);
+        return HTML::attributes($this->linkAttributes);
+    }
+
+    /**
+     * Get HTML parent attribute data.
+     *
+     * @return mixed
+     */
+    public function getItemAttributes()
+    {
+        $itemAttributes = $this->itemAttributes;
+
+        (empty($itemAttributes['class']) && ! $this->isActive()) || $itemAttributes['class'][] = $this->isActive() ? 'active' : '';
+
+        return HTML::attributes($itemAttributes);
     }
 
     /**

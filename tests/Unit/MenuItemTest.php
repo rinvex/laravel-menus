@@ -38,7 +38,8 @@ class MenuItemTest extends BaseTestCase
             'title' => 'My Menu item',
             'type' => 'my-menu-item',
             'icon' => 'fa fa-user',
-            'attributes' => [],
+            'linkAttributes' => [],
+            'itemAttributes' => [],
             'order' => 1,
         ];
         $menuItem = new MenuItem($properties);
@@ -55,7 +56,8 @@ class MenuItemTest extends BaseTestCase
             'title' => 'My Menu item',
             'type' => 'my-menu-item',
             'icon' => 'fa fa-user',
-            'attributes' => [],
+            'linkAttributes' => [],
+            'itemAttributes' => [],
             'active' => false,
             'order' => 1,
         ];
@@ -66,7 +68,8 @@ class MenuItemTest extends BaseTestCase
         $this->assertEquals('My Menu item', $menuItem->title);
         $this->assertEquals('my-menu-item', $menuItem->type);
         $this->assertEquals('fa fa-user', $menuItem->icon);
-        $this->assertSame([], $menuItem->attributes);
+        $this->assertSame([], $menuItem->linkAttributes);
+        $this->assertSame([], $menuItem->itemAttributes);
         $this->assertSame(1, $menuItem->order);
     }
 
@@ -140,8 +143,8 @@ class MenuItemTest extends BaseTestCase
         $this->assertEquals('settings.account', $childMenuItem->route[0]);
         $this->assertEquals(['user_id' => 1], $childMenuItem->route[1]);
         $this->assertSame(1, $childMenuItem->order);
-        $id = md5(json_encode(Arr::except($childMenuItem->properties, ['attributes.id'])));
-        $this->assertEquals(['my-attr' => 'value', 'id' => $id], $childMenuItem->attributes);
+        $id = md5(json_encode(Arr::except($childMenuItem->properties, ['linkAttributes.id'])));
+        $this->assertEquals(['my-attr' => 'value', 'id' => $id], $childMenuItem->linkAttributes);
     }
 
     /** @test */
@@ -173,8 +176,8 @@ class MenuItemTest extends BaseTestCase
         $this->assertEquals('settings/account', $childMenuItem->url);
         $this->assertEquals('Account', $childMenuItem->title);
         $this->assertSame(1, $childMenuItem->order);
-        $id = md5(json_encode(Arr::except($childMenuItem->properties, ['attributes.id'])));
-        $this->assertEquals(['my-attr' => 'value', 'id' => $id], $childMenuItem->attributes);
+        $id = md5(json_encode(Arr::except($childMenuItem->properties, ['linkAttributes.id'])));
+        $this->assertEquals(['my-attr' => 'value', 'id' => $id], $childMenuItem->linkAttributes);
     }
 
     /** @test */
@@ -259,15 +262,27 @@ class MenuItemTest extends BaseTestCase
     }
 
     /** @test */
-    public function it_can_get_item_html_attributes()
+    public function it_can_get_link_attributes()
     {
         $menuItem = new MenuItem([
             'url' => 'settings/account',
             'title' => 'Parent Item',
-            'attributes' => ['my-attr' => 'value'],
+            'linkAttributes' => ['my-attr' => 'value'],
         ]);
 
-        $this->assertEquals(' my-attr="value"', $menuItem->getAttributes());
+        $this->assertEquals(' my-attr="value"', $menuItem->getLinkAttributes());
+    }
+
+    /** @test */
+    public function it_can_get_item_attributes()
+    {
+        $menuItem = new MenuItem([
+            'url' => 'settings/account',
+            'title' => 'Parent Item',
+            'itemAttributes' => ['my-attr' => 'value'],
+        ]);
+
+        $this->assertEquals(' my-attr="value"', $menuItem->getItemAttributes());
     }
 
     /** @test */
