@@ -341,16 +341,16 @@ class MenuGenerator implements Countable
     /**
      * Add new divider item.
      *
-     * @param int   $order
-     * @param array $linkAttributes
+     * @param int|null $order
+     * @param array    $itemAttributes
      *
      * @return \Rinvex\Menus\Models\MenuItem
      */
-    public function divider(int $order = null, array $linkAttributes = [], array $itemAttributes = []): MenuItem
+    public function divider(int $order = null, array $itemAttributes = []): MenuItem
     {
         $type = 'divider';
 
-        return $this->add(compact('type', 'order', 'linkAttributes', 'itemAttributes'));
+        return $this->add(compact('type', 'order', 'itemAttributes'));
     }
 
     /**

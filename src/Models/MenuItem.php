@@ -175,16 +175,15 @@ class MenuItem
      * Add new divider item.
      *
      * @param int|null $order
-     * @param array    $linkAttributes
      * @param array    $itemAttributes
      *
      * @return static
      */
-    public function divider(int $order = null, array $linkAttributes = [], array $itemAttributes = [])
+    public function divider(int $order = null, array $itemAttributes = [])
     {
         $type = 'divider';
 
-        return $this->add(compact('type', 'order', 'linkAttributes', 'itemAttributes'));
+        return $this->add(compact('type', 'order', 'itemAttributes'));
     }
 
     /**
