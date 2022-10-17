@@ -185,7 +185,19 @@ class MenuItem
 
         return $this->add(compact('type', 'order', 'itemAttributes'));
     }
+    /**
+     * Empty the current item childs.
+     *
+     * @return $this
+     */
+    public function destroy()
+    {
+        $this->fill([]);
+        $this->hideCallbacks = collect();
+        $this->childs = collect();
 
+        return $this;
+    }
     /**
      * Get childs.
      *
