@@ -187,6 +187,21 @@ class MenuItem
     }
 
     /**
+     * Empty the current item childs.
+     *
+     * @return $this
+     */
+    public function destroy()
+    {
+        $this->properties = [];
+        $this->activeWhen = null;
+        $this->childs = collect();
+        $this->hideCallbacks = collect();
+
+        return $this;
+    }
+
+    /**
      * Get childs.
      *
      * @return \Illuminate\Support\Collection
