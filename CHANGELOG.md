@@ -5,6 +5,9 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](CONTRIBUTING.md).
 
 
+## [v6.2.1] - 2022-12-30
+- add feature to destroy menu item dropdown (#102)
+
 ## [v6.2.0] - 2022-05-17
 - Simplify menu divider since it doesn't have a link, so it doesn't need a link attributes
 - Rename attributes to linkAttributes to distinguish from itemAttributes
@@ -106,6 +109,7 @@ This project adheres to [Semantic Versioning](CONTRIBUTING.md).
 ## v0.0.1 - 2018-02-18
 - Tag first release
 
+[v6.2.1]: https://github.com/rinvex/laravel-menus/compare/v6.2.0...v6.2.1
 [v6.2.0]: https://github.com/rinvex/laravel-menus/compare/v6.1.0...v6.2.0
 [v6.1.0]: https://github.com/rinvex/laravel-menus/compare/v6.0.0...v6.1.0
 [v6.0.0]: https://github.com/rinvex/laravel-menus/compare/v5.0.2...v6.0.0
