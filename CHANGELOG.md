@@ -5,6 +5,9 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](CONTRIBUTING.md).
 
 
+## [v7.0.0] - 2023-01-09
+- Drop PHP v8.0 support and update composer dependencies
+
 ## [v6.2.1] - 2022-12-30
 - add feature to destroy menu item dropdown (#102)
 
@@ -109,6 +112,7 @@ This project adheres to [Semantic Versioning](CONTRIBUTING.md).
 ## v0.0.1 - 2018-02-18
 - Tag first release
 
+[v7.0.0]: https://github.com/rinvex/laravel-menus/compare/v6.2.1...v7.0.0
 [v6.2.1]: https://github.com/rinvex/laravel-menus/compare/v6.2.0...v6.2.1
 [v6.2.0]: https://github.com/rinvex/laravel-menus/compare/v6.1.0...v6.2.0
 [v6.1.0]: https://github.com/rinvex/laravel-menus/compare/v6.0.0...v6.1.0
