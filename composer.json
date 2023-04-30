@@ -55,7 +55,7 @@
         "codedungeon/phpunit-result-printer": "^0.32.0",
         "mockery/mockery": "^1.5.0",
         "orchestra/testbench": "^7.0.0",
-        "phpunit/phpunit": "^9.5.0"
+        "phpunit/phpunit": "^10.1.0"
     },
     "autoload": {
         "psr-4": {
