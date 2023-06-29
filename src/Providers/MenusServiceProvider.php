@@ -29,8 +29,8 @@ class MenusServiceProvider extends ServiceProvider
         $this->app['rinvex.menus.presenters']->put('navmenu', \Rinvex\Menus\Presenters\NavMenuPresenter::class);
         $this->app['rinvex.menus.presenters']->put('adminlte', \Rinvex\Menus\Presenters\AdminltePresenter::class);
 
-        // Publish Resources
-        $this->publishesViews('rinvex/laravel-menus');
+        // Register paths to be published by the publish command.
+        $this->publishViewsFrom(__DIR__.'/../../resources/views', 'rinvex/menus');
     }
 
     /**
@@ -42,8 +42,6 @@ class MenusServiceProvider extends ServiceProvider
         $this->app->singleton('rinvex.menus', MenuManager::class);
 
         // Register menu presenters service
-        $this->app->singleton('rinvex.menus.presenters', function ($app) {
-            return collect();
-        });
+        $this->app->singleton('rinvex.menus.presenters', fn() => collect());
     }
 }
