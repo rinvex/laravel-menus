@@ -42,6 +42,6 @@ class MenusServiceProvider extends ServiceProvider
         $this->app->singleton('rinvex.menus', MenuManager::class);
 
         // Register menu presenters service
-        $this->app->singleton('rinvex.menus.presenters', fn() => collect());
+        $this->app->singleton('rinvex.menus.presenters', fn () => collect());
     }
 }
