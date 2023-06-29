@@ -5,9 +5,13 @@ All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](CONTRIBUTING.md).
 
 
+## [v7.1.1] - 2023-06-29
+- Refactor resource loading and publishing
+- Fix: use $item instead of $this (#103)
+
 ## [v7.1.0] - 2023-05-02
-- 49c78d9: Add support for Laravel v11, and drop support for Laravel v9
-- e88112c: Update phpunit to v10.1 from v9.5
+- Add support for Laravel v11, and drop support for Laravel v9
+- Update phpunit to v10.1 from v9.5
 
 ## [v7.0.0] - 2023-01-09
 - Drop PHP v8.0 support and update composer dependencies
@@ -116,6 +120,7 @@ This project adheres to [Semantic Versioning](CONTRIBUTING.md).
 ## v0.0.1 - 2018-02-18
 - Tag first release
 
+[v7.1.1]: https://github.com/rinvex/laravel-menus/compare/v7.1.0...v7.1.1
 [v7.1.0]: https://github.com/rinvex/laravel-menus/compare/v7.0.0...v7.1.0
 [v7.0.0]: https://github.com/rinvex/laravel-menus/compare/v6.2.1...v7.0.0
 [v6.2.1]: https://github.com/rinvex/laravel-menus/compare/v6.2.0...v6.2.1
