@@ -18,7 +18,10 @@ class MenusServiceProvider extends ServiceProvider
     public function boot()
     {
         // Load resources
-        $this->loadViewsFrom(__DIR__.'/../../resources/views', 'rinvex/menus');
+        $this->loadViewsFrom(realpath(__DIR__.'/../../resources/views'), 'rinvex/menus');
+
+        // Register paths to be published by the publish command.
+        $this->publishViewsFrom(realpath(__DIR__.'/../../resources/views'), 'rinvex/menus');
 
         // Register core presenters
         $this->app['rinvex.menus.presenters']->put('navbar', \Rinvex\Menus\Presenters\NavbarPresenter::class);
@@ -28,9 +31,6 @@ class MenusServiceProvider extends ServiceProvider
         $this->app['rinvex.menus.presenters']->put('sidebar', \Rinvex\Menus\Presenters\SidebarMenuPresenter::class);
         $this->app['rinvex.menus.presenters']->put('navmenu', \Rinvex\Menus\Presenters\NavMenuPresenter::class);
         $this->app['rinvex.menus.presenters']->put('adminlte', \Rinvex\Menus\Presenters\AdminltePresenter::class);
-
-        // Register paths to be published by the publish command.
-        $this->publishViewsFrom(__DIR__.'/../../resources/views', 'rinvex/menus');
     }
 
     /**
