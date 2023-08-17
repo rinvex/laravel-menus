@@ -391,6 +391,10 @@ class MenuItem
         if ($this->route) {
             return $this->hasActiveStateFromRoute();
         }
+        
+        if($this->hasChilds()) {
+            return $this->hasActiveStateFromChilds();
+        }
 
         return $this->hasActiveStateFromUrl();
     }
