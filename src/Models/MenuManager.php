@@ -136,10 +136,10 @@ class MenuManager implements Countable
 
                 $params ? $callback($instance, ...$params) : $callback($instance);
             });
-            
+
             return $instance->setBindings($bindings);
         }
-        
+
         return null;
     }
 
@@ -158,11 +158,11 @@ class MenuManager implements Countable
         if ($this->has($name)) {
             $instance = $this->make($name, $presenter, $bindings, $specialSidebar);
             if ($instance) {
-                
+
                 return $instance->render($presenter, $specialSidebar);
             }
         }
-        
+
         return null;
     }
 
