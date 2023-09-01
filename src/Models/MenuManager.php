@@ -110,16 +110,16 @@ class MenuManager implements Countable
     }
 
     /**
-     * Render the menu tag by given name.
+     * Initializes the menu tag by given name without rendering.
      *
      * @param string $name
      * @param string $presenter
      * @param array  $bindings
      * @param bool   $specialSidebar
      *
-     * @return string|null
+     * @return MenuGenerator|null
      */
-    public function render(string $name, string $presenter = null, array $bindings = [], bool $specialSidebar = false): ?string
+    public function make(string $name, string $presenter = null, array $bindings = [], bool $specialSidebar = false): ?MenuGenerator
     {
         if ($this->has($name)) {
             $instance = $this->instance($name);
@@ -136,10 +136,32 @@ class MenuManager implements Countable
 
                 $params ? $callback($instance, ...$params) : $callback($instance);
             });
-
-            return $instance->setBindings($bindings)->render($presenter, $specialSidebar);
+            
+            return $instance->setBindings($bindings);
         }
 
+        return null;
+    }
+    
+    /**
+     * Render the menu tag by given name.
+     *
+     * @param string $name
+     * @param string $presenter
+     * @param array  $bindings
+     * @param bool   $specialSidebar
+     *
+     * @return string|null
+     */
+    public function render(string $name, string $presenter = null, array $bindings = [], bool $specialSidebar = false): ?string
+    {
+        if ($this->has($name)) {
+            $instance = $this->make($name, $presenter, $bindings, $specialSidebar);
+            
+            if ($instance) {
+                return $instance->render($presenter, $specialSidebar);
+            }
+        }
         return null;
     }
 
