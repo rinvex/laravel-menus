@@ -265,7 +265,7 @@ class MenuGenerator implements Countable
      *
      * @return \Illuminate\Support\Collection
      */
-    public function getItems(): \Illuminate\Support\Collection
+    public function getItems(): Collection
     {
         return $this->items;
     }
