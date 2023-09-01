@@ -261,6 +261,16 @@ class MenuGenerator implements Countable
     }
 
     /**
+     * Returns an array of menu items to be used without render.
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function getItems(): Collection
+    {
+        return $this->items;
+    }
+
+    /**
      * Create new menu with dropdown.
      *
      * @param callable    $callback
