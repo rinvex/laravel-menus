@@ -140,7 +140,7 @@ class MenuManager implements Countable
         }
         return null;
     }
-    
+
     /**
      * Render the menu tag by given name.
      *
