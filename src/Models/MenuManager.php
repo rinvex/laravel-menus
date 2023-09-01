@@ -158,7 +158,6 @@ class MenuManager implements Countable
         if ($this->has($name)) {
             $instance = $this->make($name, $presenter, $bindings, $specialSidebar);
             if ($instance) {
-
                 return $instance->render($presenter, $specialSidebar);
             }
         }
