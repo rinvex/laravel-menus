@@ -112,10 +112,10 @@ class MenuManager implements Countable
     /**
      * Initializes the menu tag by given name without rendering.
      *
-     * @param string $name
+     * @param string      $name
      * @param string|null $presenter
-     * @param array  $bindings
-     * @param bool   $specialSidebar
+     * @param array       $bindings
+     * @param bool        $specialSidebar
      *
      * @return MenuGenerator|null
      */
@@ -144,10 +144,10 @@ class MenuManager implements Countable
     /**
      * Render the menu tag by given name.
      *
-     * @param string $name
+     * @param string      $name
      * @param string|null $presenter
-     * @param array  $bindings
-     * @param bool   $specialSidebar
+     * @param array       $bindings
+     * @param bool        $specialSidebar
      *
      * @return string|null
      */
